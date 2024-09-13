@@ -1,11 +1,12 @@
-from typing import List, Optional, Union
+from typing import List, Optional
 from pydantic import BaseModel, Field, ConfigDict
+from ..data_models import OpenAIEndpointRequestBody, OpenAIEndpointResponseBody
 from .types import WhisperModel, TranscriptionResponseFormat, TimestampGranularity
 
 
-class CreateTranscriptionRequest(BaseModel):
-    file: bytes = Field(..., description="The audio file to transcribe")
-    model: WhisperModel = Field(..., description="The model to use for transcription")
+class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
+    file: bytes = Field(description="The audio file to transcribe")
+    model: WhisperModel = Field(description="The model to use for transcription")
     language: Optional[str] = Field(
         None, description="The language of the input audio (ISO-639-1 format)"
     )
@@ -26,8 +27,8 @@ class CreateTranscriptionRequest(BaseModel):
     )
 
 
-class TranscriptionResponse(BaseModel):
-    text: str = Field(..., description="The transcribed text")
+class TranscriptionResponseBody(OpenAIEndpointResponseBody):
+    text: str = Field(description="The transcribed text")
 
 
 class Word(BaseModel):
@@ -49,17 +50,16 @@ class Segment(BaseModel):
     no_speech_prob: float
 
 
-class VerboseTranscriptionResponse(BaseModel):
+class OpenAIVerboseTranscriptionResponseBody(OpenAIEndpointResponseBody):
+    # TODO: check output object with different timestamp_granularities in request body
     task: str = Field("transcribe", description="The task performed")
     language: str = Field(
-        ..., description="The detected or specified language of the input audio"
+        description="The detected or specified language of the input audio"
     )
-    duration: float = Field(
-        ..., description="The duration of the input audio in seconds"
-    )
-    text: str = Field(..., description="The transcribed text")
+    duration: float = Field(description="The duration of the input audio in seconds")
+    text: str = Field(description="The transcribed text")
     words: Optional[List[Word]] = Field(None, description="Word-level timestamps")
-    segments: List[Segment] = Field(..., description="Segment-level details")
+    segments: Optional[List[Segment]] = Field(description="Segment-level details")
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -100,10 +100,3 @@ class VerboseTranscriptionResponse(BaseModel):
             }
         }
     )
-
-
-def create_transcription(
-    request: CreateTranscriptionRequest,
-) -> Union[TranscriptionResponse, VerboseTranscriptionResponse]:
-    """Transcribes audio into the input language."""
-    ...

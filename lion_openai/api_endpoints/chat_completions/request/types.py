@@ -1,7 +1,25 @@
-from typing import Literal, TypeAlias
+from enum import Enum
 
-RoleLiteral: TypeAlias = Literal["system", "user", "assistant", "tool"]
-DetailLiteral: TypeAlias = Literal["auto", "low", "high"]
-FormatTypeLiteral: TypeAlias = Literal["text", "json_object", "json_schema"]
-ServiceTierLiteral: TypeAlias = Literal["auto", "default"]
-ToolChoiceLiteral: TypeAlias = Literal["none", "auto", "required"]
+
+class Role(str, Enum):
+    SYSTEM = "system"
+    USER = "user"
+    ASSISTANT = "assistant"
+    TOOL = "tool"
+
+
+class Detail(str, Enum):
+    AUTO = "auto"
+    LOW = "low"
+    HIGH = "high"
+
+
+class ServiceTier(str, Enum):
+    AUTO = "auto"
+    DEFAULT = "default"
+
+
+class ToolChoice(str, Enum):
+    NONE = "none"
+    AUTO = "auto"
+    REQUIRED = "required"

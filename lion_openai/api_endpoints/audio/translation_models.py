@@ -1,14 +1,14 @@
-from typing import List, Optional
+from typing import Optional
 
 # translation.py
-from pydantic import BaseModel, Field
+from pydantic import Field
+from ..data_models import OpenAIEndpointRequestBody, OpenAIEndpointResponseBody
 from .types import WhisperModel, TranscriptionResponseFormat
-from .transcription_models import TranscriptionResponse
 
 
-class CreateTranslationRequest(BaseModel):
-    file: bytes = Field(..., description="The audio file to translate")
-    model: WhisperModel = Field(..., description="The model to use for translation")
+class OpenAITranslationRequestBody(OpenAIEndpointRequestBody):
+    file: bytes = Field(description="The audio file to translate")
+    model: WhisperModel = Field(description="The model to use for translation")
     prompt: Optional[str] = Field(
         None,
         description="An optional text to guide the model's style or continue a previous audio segment",
@@ -22,6 +22,5 @@ class CreateTranslationRequest(BaseModel):
     )
 
 
-def create_translation(request: CreateTranslationRequest) -> TranscriptionResponse:
-    """Translates audio into English."""
-    ...
+class OpenAITranslationResponseBody(OpenAIEndpointResponseBody):
+    text: str = Field(description="The translated text")

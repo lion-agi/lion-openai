@@ -1,13 +1,13 @@
-from typing import List, Union, Literal
-from pydantic import BaseModel, Field, model_validator, ConfigDict
+from typing import List, Union, Literal, Optional
+from pydantic import Field, model_validator, ConfigDict
+from ..data_models import OpenAIEndpointRequestBody
 
 InputType = Union[str, List[str], List[int], List[List[int]]]
 EncodingFormat = Literal["float", "base64"]
 
 
-class OpenAIEmbeddingRequest(BaseModel):
+class OpenAIEmbeddingRequestBody(OpenAIEndpointRequestBody):
     input: InputType = Field(
-        ...,
         description=(
             "Input text to embed, encoded as a string or array of tokens. "
             "To embed multiple inputs in a single request, pass an array of "
@@ -17,22 +17,24 @@ class OpenAIEmbeddingRequest(BaseModel):
             "array must be 2048 dimensions or less."
         ),
     )
+
     model: str = Field(
-        ...,
         description=(
             "ID of the model to use. You can use the List models API to see "
             "all of your available models, or see our Model overview for "
             "descriptions of them."
         ),
     )
-    encoding_format: EncodingFormat = Field(
+
+    encoding_format: Optional[EncodingFormat] = Field(
         "float",
         description=(
             "The format to return the embeddings in. Can be either `float` "
             "or `base64`."
         ),
     )
-    dimensions: int | None = Field(
+
+    dimensions: Optional[int] = Field(
         None,
         description=(
             "The number of dimensions the resulting output embeddings "
@@ -40,7 +42,8 @@ class OpenAIEmbeddingRequest(BaseModel):
             "models."
         ),
     )
-    user: str | None = Field(
+
+    user: Optional[str] = Field(
         None,
         description=(
             "A unique identifier representing your end-user, which can help "
@@ -49,7 +52,7 @@ class OpenAIEmbeddingRequest(BaseModel):
     )
 
     @model_validator(mode="after")
-    def validate_input(self) -> "OpenAIEmbeddingRequest":
+    def validate_input(self) -> "OpenAIEmbeddingRequestBody":
         if isinstance(self.input, str) and self.input.strip() == "":
             raise ValueError("Input cannot be an empty string.")
         if isinstance(self.input, list):

@@ -1,31 +1,38 @@
-from typing import Any, Dict, Literal
+from typing import Any, Dict, Literal, Optional
 from pydantic import BaseModel, Field, model_validator
-from typing_extensions import Annotated
+
+import warnings
+
+# Suppress the specific warning about field name shadowing
+warnings.filterwarnings(
+    "ignore",
+    message='Field name "schema" in "JSONSchema" shadows an attribute in parent "BaseModel"',
+)
 
 
 class JSONSchema(BaseModel):
-    description: str | None = Field(
+    description: Optional[str] = Field(
         None,
         description=(
             "A description of what the response format is for, used by the "
             "model to determine how to respond in the format."
         ),
     )
-    name: Annotated[
-        str,
-        Field(
-            max_length=64,
-            pattern="^[a-zA-Z0-9_-]+$",
-            description=(
-                "The name of the response format. Must be a-z, A-Z, 0-9, or "
-                "contain underscores and dashes, with a maximum length of 64."
-            ),
+
+    name: str = Field(
+        max_length=64,
+        pattern="^[a-zA-Z0-9_-]+$",
+        description=(
+            "The name of the response format. Must be a-z, A-Z, 0-9, or "
+            "contain underscores and dashes, with a maximum length of 64."
         ),
-    ]
-    schema: Dict[str, Any] | None = Field(
+    )
+
+    schema: Optional[Dict[str, Any]] = Field(
         None,
         description="The schema for the response format, described as a JSON Schema object.",
     )
+
     strict: bool | None = Field(
         False,
         description=(

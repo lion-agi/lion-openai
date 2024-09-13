@@ -1,122 +1,124 @@
-from typing import Optional, Dict, Any, List, Literal
+from typing import Literal
 from pydantic import BaseModel, Field
-from .base_models import OpenAIBaseModel
-from .types import (
-    ObjectTypeLiteral,
-    EndpointLiteral,
-    CompletionWindowLiteral,
-    BatchStatusType,
-)
-from .error_models import ErrorList
+from ..data_models import OpenAIEndpointResponseBody
+
+
+class Data(BaseModel):
+    code: str = Field(description="An error code identifying the error type.")
+
+    message: str = Field(
+        description="A human-readable message providing more details about the error."
+    )
+
+    param: str | None = Field(
+        None,
+        description="The name of the parameter that caused the error, if applicable.",
+    )
+
+    line: int | None = Field(
+        None,
+        description="The line number of the input file where the error occurred, if applicable.",
+    )
+
+
+class Error(BaseModel):
+    object: Literal["list"] = Field(
+        description="The object type, which is always 'list'."
+    )
+
+    data: Data = Field(description="A list of error data.")
 
 
 class RequestCounts(BaseModel):
-    total: int = Field(description="The total number of requests.")
-    completed: int = Field(description="The number of completed requests.")
-    failed: int = Field(description="The number of failed requests.")
+    total: int = Field(description="Total number of requests in the batch.")
+
+    completed: int = Field(
+        description="Number of requests that have been completed successfully."
+    )
+
+    failed: int = Field(description="Number of requests that have failed.")
 
 
-class Batch(OpenAIBaseModel):
+class OpenAIBatchResponseBody(OpenAIEndpointResponseBody):
     id: str = Field(description="A unique identifier for the batch.")
-    object: ObjectTypeLiteral = Field(
-        "batch", description="The object type, which is always 'batch'."
+
+    object: Literal["batch"] = Field(
+        description="The object type, which is always 'batch'."
     )
-    endpoint: EndpointLiteral = Field(
-        description="The API endpoint used for this batch."
+
+    endpoint: str = Field(description="The API endpoint used for this batch.")
+
+    errors: Error | None = Field(
+        None, description="Errors encountered during batch processing."
     )
-    errors: Optional[ErrorList] = Field(
-        None, description="List of errors encountered during batch processing."
+
+    input_file_id: str | None = Field(
+        None, description="The ID of the input file for the batch."
     )
-    input_file_id: str = Field(description="The ID of the input file for this batch.")
-    completion_window: CompletionWindowLiteral = Field(
-        description="The time window for completing the batch."
+
+    completion_window: str | None = Field(
+        None, description="The time frame within which the batch should be processed."
     )
-    status: BatchStatusType = Field(description="The current status of the batch.")
-    output_file_id: Optional[str] = Field(
-        None, description="The ID of the output file, if available."
+
+    status: str = Field(description="The current status of the batch.")
+
+    output_file_id: str | None = Field(
+        None,
+        description="The ID of the file containing the outputs of successfully executed requests.",
     )
-    error_file_id: Optional[str] = Field(
-        None, description="The ID of the error file, if errors occurred."
+
+    error_file_id: str | None = Field(
+        None,
+        description="The ID of the file containing the outputs of requests with errors.",
     )
-    created_at: int = Field(
-        description="The Unix timestamp when the batch was created."
+
+    created_at: int | None = Field(
+        None,
+        description="The Unix timestamp (in seconds) for when the batch was created.",
     )
-    in_progress_at: Optional[int] = Field(
-        None, description="The Unix timestamp when the batch started processing."
+
+    in_progress_at: int | None = Field(
+        None,
+        description="The Unix timestamp (in seconds) for when the batch started processing.",
     )
-    expires_at: Optional[int] = Field(
-        None, description="The Unix timestamp when the batch will expire."
+
+    expires_at: int | None = Field(
+        None,
+        description="The Unix timestamp (in seconds) for when the batch will expire.",
     )
-    finalizing_at: Optional[int] = Field(
-        None, description="The Unix timestamp when the batch started finalizing."
+
+    finalizing_at: int | None = Field(
+        None,
+        description="The Unix timestamp (in seconds) for when the batch started finalizing.",
     )
-    completed_at: Optional[int] = Field(
-        None, description="The Unix timestamp when the batch completed."
+
+    completed_at: int | None = Field(
+        None,
+        description="The Unix timestamp (in seconds) for when the batch was completed.",
     )
-    failed_at: Optional[int] = Field(
-        None, description="The Unix timestamp when the batch failed, if applicable."
+
+    failed_at: int | None = Field(
+        None, description="The Unix timestamp (in seconds) for when the batch failed."
     )
-    expired_at: Optional[int] = Field(
-        None, description="The Unix timestamp when the batch expired, if applicable."
+
+    expired_at: int | None = Field(
+        None, description="The Unix timestamp (in seconds) for when the batch expired."
     )
-    cancelling_at: Optional[int] = Field(
-        None, description="The Unix timestamp when batch cancellation was requested."
+
+    cancelling_at: int | None = Field(
+        None,
+        description="The Unix timestamp (in seconds) for when the batch started cancelling.",
     )
-    cancelled_at: Optional[int] = Field(
-        None, description="The Unix timestamp when the batch was cancelled."
+
+    cancelled_at: int | None = Field(
+        None,
+        description="The Unix timestamp (in seconds) for when the batch was cancelled.",
     )
+
     request_counts: RequestCounts = Field(
-        description="Counts of total, completed, and failed requests."
-    )
-    metadata: Optional[Dict[str, Any]] = Field(
-        None, description="Optional metadata associated with the batch."
+        description="The request counts for different statuses within the batch."
     )
 
-    def __init__(self, **data):
-        super().__init__(**data)
-        if self.metadata:
-            for key, value in self.metadata.items():
-                if len(key) > 64:
-                    raise ValueError(f"Metadata key '{key}' exceeds 64 character limit")
-                if len(value) > 512:
-                    raise ValueError(
-                        f"Metadata value for key '{key}' exceeds 512 character limit"
-                    )
-
-
-class CreateBatchRequest(BaseModel):
-    input_file_id: str = Field(description="The ID of the input file for the batch.")
-    endpoint: EndpointLiteral = Field(
-        description="The API endpoint to use for this batch."
-    )
-    completion_window: CompletionWindowLiteral = Field(
-        description="The time window for completing the batch."
-    )
-    metadata: Optional[Dict[str, Any]] = Field(
-        None, description="Optional metadata to associate with the batch."
-    )
-
-
-class CancelBatchRequest(BaseModel):
-    batch_id: str = Field(description="The ID of the batch to cancel.")
-
-
-class RetrieveBatchRequest(BaseModel):
-    batch_id: str = Field(description="The ID of the batch to retrieve.")
-
-
-class ListBatchParameters(BaseModel):
-    after: Optional[str] = Field(None, description="A cursor for use in pagination.")
-    limit: Optional[int] = Field(
-        20, description="Number of batches to return, default is 20."
-    )
-
-
-class ListBatchResponse(BaseModel):
-    object: Literal["list"] = Field(
-        "list", description="The object type, which is always 'list'."
-    )
-    data: List[Batch] = Field(description="A list of Batch objects.")
-    has_more: bool = Field(
-        description="Whether there are more batches that can be retrieved."
+    metadata: dict | None = Field(
+        description="Set of 16 key-value pairs that can be attached to an object."
     )

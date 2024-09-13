@@ -1,4 +1,8 @@
-from typing import Literal
+from enum import Enum
 
-RoleLiteral = Literal["assistant"]
-FinishReasonLiteral = Literal["stop", "length", "content_filter", "tool_calls"]
+
+class FinishReason(str, Enum):
+    STOP = "stop"
+    LENGTH = "length"
+    CONTENT_FILTER = "content_filter"
+    TOOL_CALLS = "tool_calls"
