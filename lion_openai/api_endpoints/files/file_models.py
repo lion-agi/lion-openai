@@ -1,4 +1,4 @@
-from pydantic import Field, ConfigDict
+from pydantic import Field
 from ..data_models import OpenAIEndpointResponseBody
 from enum import Enum
 
@@ -44,19 +44,7 @@ class OpenAIFileResponseBody(OpenAIEndpointResponseBody):
 
     status_details: str | None = Field(
         None,
-        description="For details on why a fine-tuning training file failed validation, see the error field on fine_tuning.job.",
+        description="For details on why a fine-tuning training file failed validation, "
+                    "see the error field on fine_tuning.job.",
         deprecated=True,
-    )
-
-    model_config = ConfigDict(
-        json_schema_extra={
-            "example": {
-                "id": "file-abc123",
-                "object": "file",
-                "bytes": 120000,
-                "created_at": 1677610602,
-                "filename": "salesOverview.pdf",
-                "purpose": "assistants",
-            }
-        }
     )
