@@ -1,6 +1,7 @@
 from os import getenv
 from io import IOBase
 import aiohttp
+import json
 from pydantic import BaseModel, Field, field_validator
 
 from .data_models import OpenAIEndpointRequestBody, OpenAIEndpointQueryParam, OpenAIEndpointPathParam
@@ -40,11 +41,13 @@ class OpenAIRequest(BaseModel):
     def base_url(self):
         return "https://api.openai.com/v1/"
 
-    async def invoke(self, json_data: OpenAIEndpointRequestBody = None,
+    async def invoke(self,
+                     json_data: OpenAIEndpointRequestBody = None,
                      params: OpenAIEndpointQueryParam = None,
                      form_data: OpenAIEndpointRequestBody = None,
                      path_param: OpenAIEndpointPathParam = None,
-                     output_file: str = None):
+                     output_file: str = None,
+                     with_response_header: bool = False):
         def get_headers():
             header = {"Authorization": f"Bearer {self.api_key}"}
             if self.content_type:
@@ -75,6 +78,37 @@ class OpenAIRequest(BaseModel):
             async with client.request(method=self.method, url=url, headers=headers, json=json_data, params=params, data=form_data) as response:
                 response.raise_for_status()
 
+                # handle stream in chat completions
+                if json_data:
+                    if json_data.get("stream"):
+                        response_body = []
+                        file_handle = None
+                        if output_file:
+                            try:
+                                file_handle = open(output_file, "w")
+                            except Exception as e:
+                                raise ValueError(f"Invalid to output the response to {output_file}. Error:{e}")
+
+                        try:
+                            async for chunk in response.content:
+                                chunk_str = chunk.decode("utf-8")
+                                chunk_list = chunk_str.split("data:")
+                                for c in chunk_list:
+                                    c = c.strip()
+                                    if c and "DONE" not in c:
+                                        if file_handle:
+                                            file_handle.write(c + "\n")
+                                        response_body.append(json.loads(c))
+
+                        finally:
+                            if file_handle:
+                                file_handle.close()
+
+                        if with_response_header:
+                            return response_body, response.headers
+                        else:
+                            return response_body
+
                 if output_file:
                     try:
                         with open(output_file, 'wb') as f:
@@ -83,16 +117,78 @@ class OpenAIRequest(BaseModel):
                         raise ValueError(f"Invalid to output the response to {output_file}. Error:{e}")
                 if self.endpoint != "audio/speech":
                     if response.headers.get("Content-Type") == "application/json":
-                        response_headers = response.headers
                         response_body = await response.json()
                     else:
-                        response_headers = response.headers
                         response_body = await response.text()
 
-                    return response_body, response_headers
+                    if with_response_header:
+                        return response_body, response.headers
+                    else:
+                        return response_body
 
                 else:
-                    return None, response.headers   # audio has no response object
+                    if with_response_header:
+                        return None, response.headers   # audio has no response object
+                    else:
+                        return None
+
+    async def stream(self,
+                     json_data: OpenAIEndpointRequestBody,
+                     verbose: bool = True,
+                     output_file: str = None,
+                     with_response_header: bool = False):
+        # for Chat Completions API only
+        if not getattr(json_data, "stream"):
+            raise ValueError("Request does not support stream. "
+                             "Only chat completions requests with stream=True are supported.")
+
+        def get_headers():
+            header = {"Authorization": f"Bearer {self.api_key}"}
+            if self.content_type:
+                header["Content-Type"] = self.content_type
+            if self.openai_organization:
+                header["OpenAI-Organization"] = self.openai_organization
+            if self.openai_project:
+                header["OpenAI-Project"] = self.openai_project
+            return header
+
+        url = self.base_url + self.get_endpoint()
+        headers = get_headers()
+        json_data = json_data.model_dump(exclude_unset=True) if json_data else None
+
+        async with aiohttp.ClientSession() as client:
+            async with client.request(method=self.method, url=url, headers=headers, json=json_data) as response:
+                response.raise_for_status()
+                file_handle = None
+
+                if output_file:
+                    try:
+                        file_handle = open(output_file, "w")
+                    except Exception as e:
+                        raise ValueError(f"Invalid to output the response to {output_file}. Error:{e}")
+
+                try:
+                    async for chunk in response.content:
+                        chunk_str = chunk.decode("utf-8")
+                        chunk_list = chunk_str.split("data:")
+                        for c in chunk_list:
+                            c = c.strip()
+                            if c and "DONE" not in c:
+                                if file_handle:
+                                    file_handle.write(c + "\n")
+                                c_dict = json.loads(c)
+                                if verbose:
+                                    if c_dict.get("choices"):
+                                        if content := c_dict["choices"][0]["delta"].get("content"):
+                                            print(content, end='', flush=True)
+                                yield c_dict
+
+                    if with_response_header:
+                        yield response.headers
+
+                finally:
+                    if file_handle:
+                        file_handle.close()
 
     def __repr__(self):
         return (f"OpenAIRequest(endpoint={self.endpoint}, method={self.method}, "
