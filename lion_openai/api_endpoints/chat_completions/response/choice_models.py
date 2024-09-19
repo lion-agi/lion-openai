@@ -1,5 +1,4 @@
-from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from .types import FinishReason
 from .message_models import Message
 from .log_prob_models import LogProbs
@@ -28,6 +27,8 @@ class Choice(BaseModel):
         description="Log probability information for the choice."
     )
 
+    model_config = ConfigDict(use_enum_values=True)
+
 
 class ChunkChoice(BaseModel):
     delta: Message = Field(
@@ -51,3 +52,5 @@ class ChunkChoice(BaseModel):
     )
 
     index: int = Field(description="The index of the choice in the list of choices.")
+
+    model_config = ConfigDict(use_enum_values=True)

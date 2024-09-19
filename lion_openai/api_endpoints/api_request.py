@@ -5,6 +5,7 @@ import json
 from pydantic import BaseModel, Field, field_validator
 
 from .data_models import OpenAIEndpointRequestBody, OpenAIEndpointQueryParam, OpenAIEndpointPathParam
+from .match_response import match_response
 
 
 class OpenAIRequest(BaseModel):
@@ -26,9 +27,10 @@ class OpenAIRequest(BaseModel):
     @field_validator("api_key", "openai_organization", "openai_project")
     @classmethod
     def get_id(cls, value: str) -> str:
-        if api_key := getenv(value):
+        try:
+            api_key = getenv(value)
             return api_key
-        else:
+        except:
             return value
 
     def get_endpoint(self, path_param: OpenAIEndpointPathParam = None):
@@ -47,7 +49,8 @@ class OpenAIRequest(BaseModel):
                      form_data: OpenAIEndpointRequestBody = None,
                      path_param: OpenAIEndpointPathParam = None,
                      output_file: str = None,
-                     with_response_header: bool = False):
+                     with_response_header: bool = False,
+                     parse_response: bool = True):
         def get_headers():
             header = {"Authorization": f"Bearer {self.api_key}"}
             if self.content_type:
@@ -60,7 +63,8 @@ class OpenAIRequest(BaseModel):
 
         def parse_form_data(data: OpenAIEndpointRequestBody):
             form_data = aiohttp.FormData()
-            for field in data.model_fields:
+            # for field in data.model_fields:
+            for field in data.model_dump(exclude_unset=True):
                 if value := getattr(data, field):
                     if isinstance(value, IOBase):
                         form_data.add_field(field, getattr(data, field))
@@ -104,6 +108,8 @@ class OpenAIRequest(BaseModel):
                             if file_handle:
                                 file_handle.close()
 
+                        if parse_response:
+                            response_body = match_response(self, response_body)
                         if with_response_header:
                             return response_body, response.headers
                         else:
@@ -121,6 +127,8 @@ class OpenAIRequest(BaseModel):
                     else:
                         response_body = await response.text()
 
+                    if parse_response:
+                        response_body = match_response(self, response_body)
                     if with_response_header:
                         return response_body, response.headers
                     else:
@@ -128,7 +136,7 @@ class OpenAIRequest(BaseModel):
 
                 else:
                     if with_response_header:
-                        return None, response.headers   # audio has no response object
+                        return None, response.headers   # audio/speech has no response object
                     else:
                         return None
 

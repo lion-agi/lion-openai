@@ -28,7 +28,7 @@ class OpenAIUploadResponseBody(OpenAIEndpointResponseBody):
     )
 
     file: Optional[OpenAIFileResponseBody] = Field(
-        description="The File object created after completion."
+        None, description="The File object created after completion."
     )
 
 

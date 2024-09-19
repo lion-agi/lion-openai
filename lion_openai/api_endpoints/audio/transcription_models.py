@@ -1,11 +1,11 @@
-from typing import List, Optional
-from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Optional, IO
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from ..data_models import OpenAIEndpointRequestBody, OpenAIEndpointResponseBody
 from .types import WhisperModel, TranscriptionResponseFormat, TimestampGranularity
 
 
 class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
-    file: bytes = Field(description="The audio file to transcribe")
+    file: str | IO = Field(description="The audio file to transcribe")
     model: WhisperModel = Field(description="The model to use for transcription")
     language: Optional[str] = Field(
         None, description="The language of the input audio (ISO-639-1 format)"
@@ -15,7 +15,7 @@ class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
         description="An optional text to guide the model's style or continue a previous audio segment",
     )
     response_format: TranscriptionResponseFormat = Field(
-        default=TranscriptionResponseFormat.JSON,
+        default="json",
         description="The format of the transcript output",
     )
     temperature: float = Field(
@@ -25,9 +25,23 @@ class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
         default=["segment"],
         description="The timestamp granularities to populate for this transcription",
     )
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    @field_validator("file")
+    @classmethod
+    def get_file_object(cls, value):
+        if isinstance(value, str):
+            value = open(value, "rb")
+        return value
+
+    def __del__(self):
+        # Ensure the file is closed when the object is destroyed
+        file_obj = self.__dict__.get("file")
+        if file_obj and not file_obj.closed:
+            file_obj.close()
 
 
-class TranscriptionResponseBody(OpenAIEndpointResponseBody):
+class OpenAITranscriptionResponseBody(OpenAIEndpointResponseBody):
     text: str = Field(description="The transcribed text")
 
 
