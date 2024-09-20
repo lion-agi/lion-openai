@@ -36,7 +36,13 @@ lion-openai/
 To install the package, run:
 
 ```bash
-poetry install
+pip install lion-openai
+```
+
+or with poetry:
+
+```bash
+poetry add lion-openai
 ```
 
 ## Usage
@@ -50,16 +56,24 @@ from lion_openai import LionAPI
 async def main():
     api_key = "your_api_key"
     api = LionAPI(api_key)
-    response = await api.make_request("GET", "https://api.example.com/data")
+    response = await api.get_data("data")
     print(response)
 
 asyncio.run(main())
 ```
 
-## Author
+## Contributing
 
-[Your Name] your.email@example.com
+We welcome contributions! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
+
+## Testing
+
+To run tests, use the following command:
+
+```bash
+poetry run pytest
+```
 
 ## License
 
-MIT
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
