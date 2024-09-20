@@ -1,6 +1,6 @@
 from typing import IO, Optional, Literal
 from enum import Enum
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, ConfigDict
 from ..data_models import OpenAIEndpointRequestBody
 
 
@@ -45,6 +45,8 @@ class OpenAIImageEditRequestBody(OpenAIEndpointRequestBody):
         None,
         description="A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse.",
     )
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @field_validator("image", "mask")
     @classmethod

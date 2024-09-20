@@ -80,7 +80,18 @@ class OpenAIRequest(BaseModel):
 
         async with aiohttp.ClientSession() as client:
             async with client.request(method=self.method, url=url, headers=headers, json=json_data, params=params, data=form_data) as response:
-                response.raise_for_status()
+                if response.status != 200:
+                    try:
+                        error_text = await response.json()
+                    except:
+                        error_text = await response.text()
+                    raise aiohttp.ClientResponseError(
+                        request_info=response.request_info,
+                        history=response.history,
+                        status=response.status,
+                        message=f"{error_text}",
+                        headers=response.headers
+                    )
 
                 # handle stream in chat completions
                 if json_data:
@@ -166,7 +177,19 @@ class OpenAIRequest(BaseModel):
 
         async with aiohttp.ClientSession() as client:
             async with client.request(method=self.method, url=url, headers=headers, json=json_data) as response:
-                response.raise_for_status()
+                if response.status != 200:
+                    try:
+                        error_text = await response.json()
+                    except:
+                        error_text = await response.text()
+                    raise aiohttp.ClientResponseError(
+                        request_info=response.request_info,
+                        history=response.history,
+                        status=response.status,
+                        message=f"{error_text}",
+                        headers=response.headers
+                    )
+
                 file_handle = None
 
                 if output_file:

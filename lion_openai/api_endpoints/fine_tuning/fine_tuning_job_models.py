@@ -14,9 +14,9 @@ class Status(str, Enum):
 
 
 class Error(BaseModel):
-    code: str = Field(description="A machine-readable error code.")
+    code: str | None = Field(None, description="A machine-readable error code.")
 
-    message: str = Field(description="A human-readable error message.")
+    message: str | None = Field(None, description="A human-readable error message.")
 
     param: str | None = Field(
         None, description="The parameter that was invalid, if applicable."
