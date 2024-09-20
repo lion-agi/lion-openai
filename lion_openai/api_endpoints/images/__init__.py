@@ -5,5 +5,5 @@ from .image_variation_models import OpenAIImageVariationRequestBody
 __all__ = [
     "OpenAIImageRequestBody",
     "OpenAIImageEditRequestBody",
-    "OpenAIImageVariationRequestBody"
+    "OpenAIImageVariationRequestBody",
 ]

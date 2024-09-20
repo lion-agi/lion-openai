@@ -4,9 +4,9 @@ import logging
 from typing import Any, Dict, Optional
 from pydantic import BaseModel, ValidationError
 from aiohttp import ClientSession, ClientResponseError
-from tenacity import retry, stop_after_attempt, wait_exponential
 
-class LionAPI:
+
+class LionOpenAIAPI:
     """
     A class to interact with the Lion system API asynchronously.
     """
@@ -30,8 +30,12 @@ class LionAPI:
         if self.session:
             await self.session.close()
 
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
-    async def _make_request(self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    @retry(
+        stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10)
+    )
+    async def _make_request(
+        self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         Make an asynchronous request to the Lion system API.
 
@@ -43,14 +47,16 @@ class LionAPI:
         url = f"{self.base_url}/{endpoint}"
         headers = {
             "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
 
         if not self.session:
             self.session = ClientSession()
 
         try:
-            async with self.session.request(method, url, json=data, headers=headers) as response:
+            async with self.session.request(
+                method, url, json=data, headers=headers
+            ) as response:
                 response.raise_for_status()
                 return await response.json()
         except ClientResponseError as e:

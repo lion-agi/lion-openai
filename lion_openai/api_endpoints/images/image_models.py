@@ -18,13 +18,9 @@ class Style(str, Enum):
 
 
 class OpenAIImageRequestBody(OpenAIEndpointRequestBody):
-    prompt: str = Field(
-        description="A text description of the desired image(s)."
-    )
+    prompt: str = Field(description="A text description of the desired image(s).")
 
-    model: str = Field(
-        "dall-e-2", description="The model to use for image generation."
-    )
+    model: str = Field("dall-e-2", description="The model to use for image generation.")
 
     n: int | None = Field(
         1, description="The number of images to generate.", ge=1, le=10

@@ -2,7 +2,7 @@
 name = "lion-openai"
 version = "0.1.0"
 description = "An asynchronous Python package for interacting with the Lion system API"
-authors = ["[Your Name] <your.email@example.com>"]
+authors = ["LiangBingYan Luo, alina@lionagi.ai, Haiyang Li, ocean@lionagi.ai"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/lion-agi/lion-openai"

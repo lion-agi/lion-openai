@@ -14,5 +14,5 @@ class OpenAIModerationRequestBody(OpenAIEndpointRequestBody):
 
     model: Optional[Model] = Field(
         "text-moderation-latest",
-        description="Two content moderations models are available: text-moderation-stable and text-moderation-latest."
+        description="Two content moderations models are available: text-moderation-stable and text-moderation-latest.",
     )

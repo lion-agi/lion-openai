@@ -45,6 +45,6 @@ class OpenAIFileResponseBody(OpenAIEndpointResponseBody):
     status_details: str | None = Field(
         None,
         description="For details on why a fine-tuning training file failed validation, "
-                    "see the error field on fine_tuning.job.",
+        "see the error field on fine_tuning.job.",
         deprecated=True,
     )
