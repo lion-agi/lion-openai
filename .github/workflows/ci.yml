@@ -31,3 +31,5 @@ jobs:
         poetry run isort --check .
     - name: Lint with flake8
       run: poetry run flake8 .
+    - name: Run pre-commit checks
+      run: poetry run pre-commit run --all-files
