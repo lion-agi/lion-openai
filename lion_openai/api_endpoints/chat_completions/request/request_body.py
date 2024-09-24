@@ -59,7 +59,7 @@ class OpenAIChatCompletionRequestBody(OpenAIEndpointRequestBody):
         ),
     )
 
-    max_tokens: int | None = Field(
+    max_completion_tokens: int | None = Field(
         None,
         description=(
             "The maximum number of tokens that can be generated in the chat "
