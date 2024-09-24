@@ -38,27 +38,6 @@ Or if you're using pip:
 pip install lion-openai
 ```
 
-## 🛠 Usage
-
-Here's a quick example of how to use lion-openai for a chat completion:
-
-```python
-import asyncio
-from lion_openai import OpenAIClient
-from lion_openai.chat_completions.request.request_body import OpenAIChatCompletionRequestBody
-
-async def main():
-    client = OpenAIClient(api_key="your-api-key")
-    request = OpenAIChatCompletionRequestBody(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": "Hello, lion-openai!"}]
-    )
-    response = await client.chat_completion(request)
-    print(response.choices[0].message.content)
-
-asyncio.run(main())
-```
-
 ## 👨‍💻 Development Setup
 
 1. Ensure you have Python 3.10 or newer installed.
