@@ -47,7 +47,7 @@ pip install lion-openai
    ```
 3. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/lion-openai.git
+   git clone https://github.com/lion-agi/lion-openai.git
    cd lion-openai
    ```
 4. Install dependencies:
