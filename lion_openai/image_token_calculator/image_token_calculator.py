@@ -10,7 +10,10 @@ import math
 import yaml
 
 import os
-image_token_config_file_name = os.path.join(os.path.dirname(__file__), "openai_image_token_data.yaml")
+
+image_token_config_file_name = os.path.join(
+    os.path.dirname(__file__), "openai_image_token_data.yaml"
+)
 
 
 class OpenAIImageTokenCalculator(BaseModel):
@@ -48,9 +51,13 @@ class OpenAIImageTokenCalculator(BaseModel):
 
         return image.size
 
-    async def calculate(self, url: str, detail: Literal["low", "high", "auto"] = "auto"):
+    async def calculate(
+        self, url: str, detail: Literal["low", "high", "auto"] = "auto"
+    ):
         if detail not in ["low", "high", "auto"]:
-            raise ValueError("Invalid detail option. Valid options are: low, high, auto")
+            raise ValueError(
+                "Invalid detail option. Valid options are: low, high, auto"
+            )
 
         with open(image_token_config_file_name, "r") as file:
             token_config = yaml.safe_load(file)

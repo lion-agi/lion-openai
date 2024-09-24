@@ -13,7 +13,7 @@ class Size(str, Enum):
 class OpenAIImageVariationRequestBody(OpenAIEndpointRequestBody):
     image: str | IO = Field(
         description="The image to use as the basis for the variation(s). "
-                    "Must be a valid PNG file, less than 4MB, and square.",
+        "Must be a valid PNG file, less than 4MB, and square.",
     )
 
     model: Optional[Literal["dall-e-2"]] = Field(

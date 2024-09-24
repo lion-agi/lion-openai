@@ -9,4 +9,3 @@ class OpenAIUploadPartPathParam(OpenAIEndpointPathParam):
 
 class OpenAIUploadPartRequestBody(OpenAIEndpointRequestBody):
     data: bytes = Field(description="The chunk of bytes for this Part.")
-
