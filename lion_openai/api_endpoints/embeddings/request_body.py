@@ -1,5 +1,7 @@
-from typing import List, Union, Literal, Optional
-from pydantic import Field, model_validator, ConfigDict
+from typing import List, Literal, Optional, Union
+
+from pydantic import ConfigDict, Field, model_validator
+
 from ..data_models import OpenAIEndpointRequestBody
 
 InputType = Union[str, List[str], List[int], List[List[int]]]

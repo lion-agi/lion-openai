@@ -1,6 +1,8 @@
-from typing import IO, Optional, Literal
 from enum import Enum
-from pydantic import Field, field_validator, ConfigDict
+from typing import IO, Literal, Optional
+
+from pydantic import ConfigDict, Field, field_validator
+
 from ..data_models import OpenAIEndpointRequestBody
 
 
@@ -16,7 +18,8 @@ class OpenAIImageEditRequestBody(OpenAIEndpointRequestBody):
     )
 
     prompt: str = Field(
-        description="A text description of the desired image(s).", max_length=1000
+        description="A text description of the desired image(s).",
+        max_length=1000,
     )
 
     mask: Optional[str | IO] = Field(

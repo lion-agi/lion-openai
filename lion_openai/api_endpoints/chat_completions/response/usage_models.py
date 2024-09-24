@@ -9,5 +9,6 @@ class Usage(BaseModel):
     prompt_tokens: int = Field(description="Number of tokens in the prompt.")
 
     total_tokens: int = Field(
-        description="Total number of tokens used in the request (prompt + completion)"
+        description="Total number of tokens used in the"
+        " request (prompt + completion)"
     )

@@ -1,5 +1,7 @@
-from typing import List, Optional, Literal
+from typing import List, Literal, Optional
+
 from pydantic import Field
+
 from ..data_models import OpenAIEndpointQueryParam, OpenAIEndpointResponseBody
 from .fine_tuning_job_models import OpenAIFineTuningJobResponseBody
 

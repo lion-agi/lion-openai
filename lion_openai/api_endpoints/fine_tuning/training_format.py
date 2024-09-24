@@ -1,5 +1,7 @@
 from typing import List, Optional
+
 from pydantic import BaseModel, Field, SerializeAsAny
+
 from ..chat_completions.request.request_body import Message, Tool
 
 
@@ -13,7 +15,8 @@ class OpenAIChatModelTrainingFormat(BaseModel):
     )
 
     parallel_tool_calls: Optional[bool] = Field(
-        True, decription="Whether to enable parallel function calling during tool use."
+        True,
+        decription="Whether to enable parallel function calling during tool use.",
     )
 
 

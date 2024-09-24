@@ -1,5 +1,7 @@
 from typing import Literal
+
 from pydantic import BaseModel, Field, SerializeAsAny
+
 from ..data_models import OpenAIEndpointRequestBody
 from .types import Endpoint
 
@@ -23,16 +25,18 @@ class Error(BaseModel):
 
 class OpenAIBatchRequestInputObject(BaseModel):
     custom_id: str = Field(
-        description="A developer-provided per-request id that will be used to match outputs to inputs. "
+        description="A developer-provided per-request id "
+        "that will be used to match outputs to inputs. "
         "Must be unique for each request in a batch."
     )
 
     method: Literal["POST"] = Field(
-        description="The HTTP method to be used for the request. Currently only POST is supported."
+        description="The HTTP method to be used for the "
+        "request. Currently only POST is supported."
     )
 
     url: Endpoint = Field(
-        description="The OpenAI API relative URL to be used for the request."
+        description="The OpenAI API relative URL to be" " used for the request."
     )
 
     body: SerializeAsAny[OpenAIEndpointRequestBody] = Field(
@@ -44,7 +48,8 @@ class OpenAIBatchRequestOutputObject(BaseModel):
     id: str = Field(description="The output object id.")
 
     custom_id: str = Field(
-        description="A developer-provided per-request id that will be used to match outputs to inputs."
+        description="A developer-provided per-request id"
+        " that will be used to match outputs to inputs."
     )
 
     response: Response | None = Field(description="The endpoint response body.")

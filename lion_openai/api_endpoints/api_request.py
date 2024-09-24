@@ -1,10 +1,15 @@
-from os import getenv
-from io import IOBase
-import aiohttp
 import json
+from io import IOBase
+from os import getenv
+
+import aiohttp
 from pydantic import BaseModel, Field, field_validator
 
-from .data_models import OpenAIEndpointRequestBody, OpenAIEndpointQueryParam, OpenAIEndpointPathParam
+from .data_models import (
+    OpenAIEndpointPathParam,
+    OpenAIEndpointQueryParam,
+    OpenAIEndpointRequestBody,
+)
 from .match_response import match_response
 
 
@@ -16,7 +21,9 @@ class OpenAIRequest(BaseModel):
         default=None, description="Organization id", exclude=True
     )
 
-    openai_project: str | None = Field(default=None, description="Project id", exclude=True)
+    openai_project: str | None = Field(
+        default=None, description="Project id", exclude=True
+    )
 
     endpoint: str = Field(description="Endpoint for request")
 
@@ -30,7 +37,7 @@ class OpenAIRequest(BaseModel):
         try:
             api_key = getenv(value)
             return api_key
-        except:
+        except Exception:
             return value
 
     def get_endpoint(self, path_param: OpenAIEndpointPathParam = None):
@@ -43,14 +50,16 @@ class OpenAIRequest(BaseModel):
     def base_url(self):
         return "https://api.openai.com/v1/"
 
-    async def invoke(self,
-                     json_data: OpenAIEndpointRequestBody = None,
-                     params: OpenAIEndpointQueryParam = None,
-                     form_data: OpenAIEndpointRequestBody = None,
-                     path_param: OpenAIEndpointPathParam = None,
-                     output_file: str = None,
-                     with_response_header: bool = False,
-                     parse_response: bool = True):
+    async def invoke(
+        self,
+        json_data: OpenAIEndpointRequestBody = None,
+        params: OpenAIEndpointQueryParam = None,
+        form_data: OpenAIEndpointRequestBody = None,
+        path_param: OpenAIEndpointPathParam = None,
+        output_file: str = None,
+        with_response_header: bool = False,
+        parse_response: bool = True,
+    ):
         def get_headers():
             header = {"Authorization": f"Bearer {self.api_key}"}
             if self.content_type:
@@ -79,18 +88,25 @@ class OpenAIRequest(BaseModel):
         form_data = parse_form_data(form_data) if form_data else None
 
         async with aiohttp.ClientSession() as client:
-            async with client.request(method=self.method, url=url, headers=headers, json=json_data, params=params, data=form_data) as response:
+            async with client.request(
+                method=self.method,
+                url=url,
+                headers=headers,
+                json=json_data,
+                params=params,
+                data=form_data,
+            ) as response:
                 if response.status != 200:
                     try:
                         error_text = await response.json()
-                    except:
+                    except Exception:
                         error_text = await response.text()
                     raise aiohttp.ClientResponseError(
                         request_info=response.request_info,
                         history=response.history,
                         status=response.status,
                         message=f"{error_text}",
-                        headers=response.headers
+                        headers=response.headers,
                     )
 
                 # handle stream in chat completions
@@ -102,7 +118,10 @@ class OpenAIRequest(BaseModel):
                             try:
                                 file_handle = open(output_file, "w")
                             except Exception as e:
-                                raise ValueError(f"Invalid to output the response to {output_file}. Error:{e}")
+                                raise ValueError(
+                                    f"Invalid to output the response "
+                                    f"to {output_file}. Error:{e}"
+                                )
 
                         try:
                             async for chunk in response.content:
@@ -128,10 +147,13 @@ class OpenAIRequest(BaseModel):
 
                 if output_file:
                     try:
-                        with open(output_file, 'wb') as f:
+                        with open(output_file, "wb") as f:
                             f.write(await response.read())
                     except Exception as e:
-                        raise ValueError(f"Invalid to output the response to {output_file}. Error:{e}")
+                        raise ValueError(
+                            f"Invalid to output the response "
+                            f"to {output_file}. Error:{e}"
+                        )
                 if self.endpoint != "audio/speech":
                     if response.headers.get("Content-Type") == "application/json":
                         response_body = await response.json()
@@ -147,19 +169,26 @@ class OpenAIRequest(BaseModel):
 
                 else:
                     if with_response_header:
-                        return None, response.headers   # audio/speech has no response object
+                        return (
+                            None,
+                            response.headers,
+                        )  # audio/speech has no response object
                     else:
                         return None
 
-    async def stream(self,
-                     json_data: OpenAIEndpointRequestBody,
-                     verbose: bool = True,
-                     output_file: str = None,
-                     with_response_header: bool = False):
+    async def stream(
+        self,
+        json_data: OpenAIEndpointRequestBody,
+        verbose: bool = True,
+        output_file: str = None,
+        with_response_header: bool = False,
+    ):
         # for Chat Completions API only
         if not getattr(json_data, "stream"):
-            raise ValueError("Request does not support stream. "
-                             "Only chat completions requests with stream=True are supported.")
+            raise ValueError(
+                "Request does not support stream. "
+                "Only chat completions requests with stream=True are supported"
+            )
 
         def get_headers():
             header = {"Authorization": f"Bearer {self.api_key}"}
@@ -176,18 +205,20 @@ class OpenAIRequest(BaseModel):
         json_data = json_data.model_dump(exclude_unset=True) if json_data else None
 
         async with aiohttp.ClientSession() as client:
-            async with client.request(method=self.method, url=url, headers=headers, json=json_data) as response:
+            async with client.request(
+                method=self.method, url=url, headers=headers, json=json_data
+            ) as response:
                 if response.status != 200:
                     try:
                         error_text = await response.json()
-                    except:
+                    except Exception:
                         error_text = await response.text()
                     raise aiohttp.ClientResponseError(
                         request_info=response.request_info,
                         history=response.history,
                         status=response.status,
                         message=f"{error_text}",
-                        headers=response.headers
+                        headers=response.headers,
                     )
 
                 file_handle = None
@@ -196,7 +227,10 @@ class OpenAIRequest(BaseModel):
                     try:
                         file_handle = open(output_file, "w")
                     except Exception as e:
-                        raise ValueError(f"Invalid to output the response to {output_file}. Error:{e}")
+                        raise ValueError(
+                            f"Invalid to output the response "
+                            f"to {output_file}. Error:{e}"
+                        )
 
                 try:
                     async for chunk in response.content:
@@ -210,8 +244,10 @@ class OpenAIRequest(BaseModel):
                                 c_dict = json.loads(c)
                                 if verbose:
                                     if c_dict.get("choices"):
-                                        if content := c_dict["choices"][0]["delta"].get("content"):
-                                            print(content, end='', flush=True)
+                                        if content := c_dict["choices"][0]["delta"].get(
+                                            "content"
+                                        ):
+                                            print(content, end="", flush=True)
                                 yield c_dict
 
                     if with_response_header:
@@ -222,5 +258,7 @@ class OpenAIRequest(BaseModel):
                         file_handle.close()
 
     def __repr__(self):
-        return (f"OpenAIRequest(endpoint={self.endpoint}, method={self.method}, "
-                f"content_type={self.content_type})")
+        return (
+            f"OpenAIRequest(endpoint={self.endpoint}, method={self.method}, "
+            f"content_type={self.content_type})"
+        )

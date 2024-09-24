@@ -1,6 +1,8 @@
-from pydantic import Field
-from ..data_models import OpenAIEndpointResponseBody
 from enum import Enum
+
+from pydantic import Field
+
+from ..data_models import OpenAIEndpointResponseBody
 
 
 class Purpose(str, Enum):
@@ -21,13 +23,14 @@ class Status(str, Enum):
 
 class OpenAIFileResponseBody(OpenAIEndpointResponseBody):
     id: str = Field(
-        description="The file identifier, which can be referenced in the API endpoints.",
+        description="The file identifier, which can be "
+        "referenced in the API endpoints.",
     )
 
     bytes: int = Field(description="The size of the file, in bytes.")
 
     created_at: int = Field(
-        description="The Unix timestamp (in seconds) for when the file was created.",
+        description="The Unix timestamp (in seconds) for " "when the file was created.",
     )
 
     filename: str = Field(description="The name of the file.")
@@ -38,13 +41,15 @@ class OpenAIFileResponseBody(OpenAIEndpointResponseBody):
 
     status: Status = Field(
         None,
-        description="The current status of the file, which can be either uploaded, processed, or error.",
+        description="The current status of the file, which can be "
+        "either uploaded, processed, or error.",
         deprecated=True,
     )
 
     status_details: str | None = Field(
         None,
-        description="For details on why a fine-tuning training file failed validation, "
-                    "see the error field on fine_tuning.job.",
+        description="For details on why a fine-tuning training "
+        "file failed validation, "
+        "see the error field on fine_tuning.job.",
         deprecated=True,
     )

@@ -1,5 +1,7 @@
-from typing import List, Optional, Literal
-from pydantic import Field, ConfigDict
+from typing import List, Literal, Optional
+
+from pydantic import Field
+
 from ..data_models import (
     OpenAIEndpointPathParam,
     OpenAIEndpointQueryParam,
@@ -34,9 +36,13 @@ class OpenAIListFineTuningCheckpointsResponseBody(OpenAIEndpointResponseBody):
         description="A list of fine-tuning checkpoints."
     )
 
-    first_id: str | None = Field(None, description="The ID of the first checkpoint in the list.")
+    first_id: str | None = Field(
+        None, description="The ID of the first checkpoint in the list."
+    )
 
-    last_id: str | None = Field(None, description="The ID of the last checkpoint in the list.")
+    last_id: str | None = Field(
+        None, description="The ID of the last checkpoint in the list."
+    )
 
     has_more: bool = Field(
         description="Whether there are more results available after this batch."

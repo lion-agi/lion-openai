@@ -1,8 +1,9 @@
-from typing import IO
-from pydantic import Field, ConfigDict, field_validator
-from ..data_models import OpenAIEndpointRequestBody
-
 from enum import Enum
+from typing import IO
+
+from pydantic import ConfigDict, Field, field_validator
+
+from ..data_models import OpenAIEndpointRequestBody
 
 
 class Purpose(str, Enum):

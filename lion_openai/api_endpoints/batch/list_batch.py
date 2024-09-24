@@ -1,5 +1,7 @@
-from typing import Optional, List, Literal
+from typing import List, Literal, Optional
+
 from pydantic import Field
+
 from ..data_models import OpenAIEndpointQueryParam, OpenAIEndpointResponseBody
 from .batch_models import OpenAIBatchResponseBody
 
@@ -28,5 +30,5 @@ class OpenAIListBatchResponseBody(OpenAIEndpointResponseBody):
     last_id: str = Field(description="The last object id in the list")
 
     has_more: bool = Field(
-        description="Whether there are more results available after this batch."
+        description="Whether there are more results " "available after this batch."
     )

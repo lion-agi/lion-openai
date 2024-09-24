@@ -1,7 +1,9 @@
-from typing import List, Optional, IO
-from pydantic import BaseModel, Field, ConfigDict, field_validator
+from typing import IO, List, Optional
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
 from ..data_models import OpenAIEndpointRequestBody, OpenAIEndpointResponseBody
-from .types import WhisperModel, TranscriptionResponseFormat, TimestampGranularity
+from .types import TimestampGranularity, TranscriptionResponseFormat, WhisperModel
 
 
 class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
@@ -12,7 +14,8 @@ class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
     )
     prompt: Optional[str] = Field(
         None,
-        description="An optional text to guide the model's style or continue a previous audio segment",
+        description="An optional text to guide the model's style or"
+        " continue a previous audio segment",
     )
     response_format: TranscriptionResponseFormat = Field(
         default="json",
@@ -23,7 +26,7 @@ class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
     )
     timestamp_granularities: Optional[List[TimestampGranularity]] = Field(
         default=["segment"],
-        description="The timestamp granularities to populate for this transcription",
+        description="The timestamp granularities to populate " "for this transcription",
     )
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -65,7 +68,8 @@ class Segment(BaseModel):
 
 
 class OpenAIVerboseTranscriptionResponseBody(OpenAIEndpointResponseBody):
-    # TODO: check output object with different timestamp_granularities in request body
+    # TODO: check output object with different
+    # timestamp_granularities in request body
     task: str = Field("transcribe", description="The task performed")
     language: str = Field(
         description="The detected or specified language of the input audio"
@@ -81,14 +85,20 @@ class OpenAIVerboseTranscriptionResponseBody(OpenAIEndpointResponseBody):
                 "task": "transcribe",
                 "language": "english",
                 "duration": 8.470000267028809,
-                "text": "The beach was a popular spot on a hot summer day. People were swimming in the ocean, building sandcastles, and playing beach volleyball.",
+                "text": (
+                    "The beach was a popular spot on a hot "
+                    "summer day. People were swimming in the ocean,"
+                    " building sandcastles, and playing beach volleyball."
+                ),
                 "segments": [
                     {
                         "id": 0,
                         "seek": 0,
                         "start": 0.0,
                         "end": 3.319999933242798,
-                        "text": " The beach was a popular spot on a hot summer day.",
+                        "text": (
+                            " The beach was a popular " "spot on a hot summer day."
+                        ),
                         "tokens": [
                             50364,
                             440,

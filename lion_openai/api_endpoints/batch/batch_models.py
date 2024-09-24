@@ -1,5 +1,7 @@
 from typing import Literal
+
 from pydantic import BaseModel, Field
+
 from ..data_models import OpenAIEndpointResponseBody
 
 
@@ -7,17 +9,20 @@ class Data(BaseModel):
     code: str = Field(description="An error code identifying the error type.")
 
     message: str = Field(
-        description="A human-readable message providing more details about the error."
+        description="A human-readable message providing more details"
+        " about the error."
     )
 
     param: str | None = Field(
         None,
-        description="The name of the parameter that caused the error, if applicable.",
+        description="The name of the parameter that caused the "
+        "error, if applicable.",
     )
 
     line: int | None = Field(
         None,
-        description="The line number of the input file where the error occurred, if applicable.",
+        description="The line number of the input file where "
+        "the error occurred, if applicable.",
     )
 
 
@@ -57,68 +62,80 @@ class OpenAIBatchResponseBody(OpenAIEndpointResponseBody):
     )
 
     completion_window: str | None = Field(
-        None, description="The time frame within which the batch should be processed."
+        None,
+        description="The time frame within which the batch " "should be processed.",
     )
 
     status: str = Field(description="The current status of the batch.")
 
     output_file_id: str | None = Field(
         None,
-        description="The ID of the file containing the outputs of successfully executed requests.",
+        description="The ID of the file containing the outputs of "
+        "successfully executed requests.",
     )
 
     error_file_id: str | None = Field(
         None,
-        description="The ID of the file containing the outputs of requests with errors.",
+        description="The ID of the file containing the outputs "
+        "of requests with errors.",
     )
 
     created_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for when the batch was created.",
+        description="The Unix timestamp (in seconds) for when "
+        "the batch was created.",
     )
 
     in_progress_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for when the batch started processing.",
+        description="The Unix timestamp (in seconds) for when the"
+        " batch started processing.",
     )
 
     expires_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for when the batch will expire.",
+        description="The Unix timestamp (in seconds) for"
+        " when the batch will expire.",
     )
 
     finalizing_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for when the batch started finalizing.",
+        description="The Unix timestamp (in seconds) for"
+        " when the batch started finalizing.",
     )
 
     completed_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for when the batch was completed.",
+        description="The Unix timestamp (in seconds) for"
+        " when the batch was completed.",
     )
 
     failed_at: int | None = Field(
-        None, description="The Unix timestamp (in seconds) for when the batch failed."
+        None,
+        description="The Unix timestamp (in seconds) for" " when the batch failed.",
     )
 
     expired_at: int | None = Field(
-        None, description="The Unix timestamp (in seconds) for when the batch expired."
+        None,
+        description="The Unix timestamp (in seconds) for" " when the batch expired.",
     )
 
     cancelling_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for when the batch started cancelling.",
+        description="The Unix timestamp (in seconds) for"
+        " when the batch started cancelling.",
     )
 
     cancelled_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for when the batch was cancelled.",
+        description="The Unix timestamp (in seconds) for"
+        " when the batch was cancelled.",
     )
 
     request_counts: RequestCounts = Field(
-        description="The request counts for different statuses within the batch."
+        description="The request counts for different statuses" " within the batch."
     )
 
     metadata: dict | None = Field(
-        description="Set of 16 key-value pairs that can be attached to an object."
+        description="Set of 16 key-value pairs that can be" " attached to an object."
     )

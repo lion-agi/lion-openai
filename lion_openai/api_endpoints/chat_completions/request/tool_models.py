@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Literal, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -37,14 +38,16 @@ class Function(BaseModel):
 
     strict: bool | None = Field(
         False,
-        description="Whether to enable strict schema adherence when generating the function call. "
-        "If set to true, the model will follow the exact schema defined in the parameters field. "
+        description="Whether to enable strict schema"
+        " adherence when generating the function call. "
+        "If set to true, the model will follow the exact"
+        " schema defined in the parameters field. "
         "Only a subset of JSON Schema is supported when strict is true.",
     )
 
 
 class Tool(BaseModel):
     type: Literal["function"] = Field(
-        description="The type of the tool. Currently, only function is supported."
+        description="The type of the tool. Currently," " only function is supported."
     )
     function: Function = Field(description="The function definition.")

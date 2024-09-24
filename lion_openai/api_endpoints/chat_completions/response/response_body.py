@@ -1,5 +1,7 @@
-from typing import List, Optional, Literal
+from typing import List, Literal, Optional
+
 from pydantic import Field
+
 from ...data_models import OpenAIEndpointResponseBody
 from .choice_models import Choice, ChunkChoice
 from .usage_models import Usage

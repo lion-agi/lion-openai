@@ -1,5 +1,7 @@
 from typing import List, Literal
-from pydantic import BaseModel, Field, ConfigDict
+
+from pydantic import BaseModel, ConfigDict, Field
+
 from ..data_models import OpenAIEndpointResponseBody
 
 
@@ -16,7 +18,8 @@ class EmbeddingObject(BaseModel):
     )
 
     object: Literal["embedding"] = Field(
-        "embedding", description='The object type, which is always "embedding".'
+        "embedding",
+        description='The object type, which is always "embedding".',
     )
 
 
@@ -24,7 +27,8 @@ class Usage(BaseModel):
     prompt_tokens: int = Field(description="Number of tokens in the prompt.")
 
     total_tokens: int = Field(
-        description="Total number of tokens used in the request (prompt + completion)"
+        description="Total number of tokens used in "
+        "the request (prompt + completion)"
     )
 
 
@@ -45,7 +49,12 @@ class OpenAIEmbeddingResponseBody(OpenAIEndpointResponseBody):
                 "data": [
                     {
                         "index": 0,
-                        "embedding": [0.0023064255, -0.009327292, ..., -0.0028842222],
+                        "embedding": [
+                            0.0023064255,
+                            -0.009327292,
+                            ...,
+                            -0.0028842222,
+                        ],
                         "object": "embedding",
                     }
                 ],

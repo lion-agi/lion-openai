@@ -1,5 +1,7 @@
 from typing import List, Literal
-from pydantic import BaseModel, Field
+
+from pydantic import Field
+
 from ..data_models import OpenAIEndpointResponseBody
 
 
@@ -20,6 +22,10 @@ class OpenAIModelResponseBody(OpenAIEndpointResponseBody):
 
 
 class OpenAIListModelResponseBody(OpenAIEndpointResponseBody):
-    object: Literal["list"] = Field(description="The object type, which is always 'list'.")
+    object: Literal["list"] = Field(
+        description="The object type, which is always 'list'."
+    )
 
-    data: List[OpenAIModelResponseBody] = Field(description="The list of model objects.")
+    data: List[OpenAIModelResponseBody] = Field(
+        description="The list of model objects."
+    )

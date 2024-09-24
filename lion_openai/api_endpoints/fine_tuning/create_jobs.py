@@ -1,5 +1,7 @@
-from typing import List, Union, Literal, Optional
-from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Literal, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
+
 from ..data_models import OpenAIEndpointRequestBody
 
 
@@ -13,13 +15,14 @@ class Wandb(BaseModel):
     )
 
     tags: Optional[List[str]] = Field(
-        None, description="A list of tags to be attached to the newly created run."
+        None,
+        description="A list of tags to be attached to the newly created run.",
     )
 
 
 class Integration(BaseModel):
     type: Literal["wandb"] = Field(
-        description="The type of integration to enable. Only 'wandb' is supported."
+        description="The type of integration to enable." " Only 'wandb' is supported."
     )
 
     wandb: Wandb = Field(description="Settings for Weights and Biases integration.")
@@ -29,7 +32,8 @@ class Hyperparameters(BaseModel):
     batch_size: Optional[str | int] = Field(
         "auto",
         description=(
-            "Number of examples in each batch. A larger batch size means that "
+            "Number of examples in each batch. A larger"
+            " batch size means that "
             "model parameters are updated less frequently, but with lower variance."
         ),
     )
@@ -83,7 +87,8 @@ class OpenAICreateFineTuningJobRequestBody(OpenAIEndpointRequestBody):
         ),
     )
     integrations: List[Integration] | None = Field(
-        None, description="A list of integrations to enable for your fine-tuning job."
+        None,
+        description="A list of integrations to enable for your fine-tuning job.",
     )
 
     seed: int | None = Field(

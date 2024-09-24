@@ -1,7 +1,9 @@
 from typing import Optional
+
 from pydantic import Field
+
 from ..data_models import OpenAIEndpointResponseBody
-from ..files.file_models import Purpose, OpenAIFileResponseBody
+from ..files.file_models import OpenAIFileResponseBody, Purpose
 
 
 class OpenAIUploadResponseBody(OpenAIEndpointResponseBody):
@@ -23,9 +25,7 @@ class OpenAIUploadResponseBody(OpenAIEndpointResponseBody):
         description="The Unix timestamp (in seconds) for when the Upload expires."
     )
 
-    object: str = Field(
-        description="The object type, which is always 'upload'."
-    )
+    object: str = Field(description="The object type, which is always 'upload'.")
 
     file: Optional[OpenAIFileResponseBody] = Field(
         None, description="The File object created after completion."
@@ -43,6 +43,4 @@ class OpenAIUploadPartResponseBody(OpenAIUploadResponseBody):
         description="The ID of the Upload object that this Part was added to."
     )
 
-    object: str = Field(
-        description="The object type, which is always 'upload.part'."
-    )
+    object: str = Field(description="The object type, which is always 'upload.part'.")

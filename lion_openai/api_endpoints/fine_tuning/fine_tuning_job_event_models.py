@@ -1,5 +1,7 @@
 from typing import Literal, Optional
+
 from pydantic import Field
+
 from ..data_models import OpenAIEndpointResponseBody
 
 
