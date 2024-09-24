@@ -1,58 +1,22 @@
 version: 2
 updates:
-  # Python dependencies managed by Poetry
+  # Poetry
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
-    versioning-strategy: "lockfile-only"
     allow:
       - dependency-type: "all"
+    versioning-strategy: "lockfile-only"
     ignore:
-      # Ignore patch updates for now, focus on minor and major
       - dependency-name: "*"
         update-types: ["version-update:semver-patch"]
-    commit-message:
-      prefix: "deps"
-      include: "scope"
+    # As we use Poetry, we need to specify this as the package manager
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "ci"
-      include: "scope"
-
-  # Docker (uncomment if you use Docker in your project)
-  # - package-ecosystem: "docker"
-  #   directory: "/"
-  #   schedule:
-  #     interval: "weekly"
-  #   open-pull-requests-limit: 5
-  #   commit-message:
-  #     prefix: "docker"
-  #     include: "scope"
-
-# Grouping of dependencies for fewer PRs
-groups:
-  python-dependencies:
-    patterns:
-      - "*"
-    exclude-patterns:
-      - "pip"
-      - "setuptools"
-      - "wheel"
-
-# Labels for pull requests
-labels:
-  - "dependencies"
-
-# Reviewers for pull requests
-reviewers:
-  - "your-github-username"
 
 # filepath: .github/dependabot.yml
