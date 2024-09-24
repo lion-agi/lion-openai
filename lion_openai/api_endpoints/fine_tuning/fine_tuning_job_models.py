@@ -1,6 +1,8 @@
-from typing import List, Optional, Union, Literal
 from enum import Enum
-from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Literal, Optional, Union
+
+from pydantic import BaseModel, ConfigDict, Field
+
 from ..data_models import OpenAIEndpointResponseBody
 
 

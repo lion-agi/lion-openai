@@ -1,12 +1,13 @@
-from typing import Any, Dict, Literal, Optional
-from pydantic import BaseModel, Field, model_validator
-
 import warnings
+from typing import Any, Dict, Literal, Optional
+
+from pydantic import BaseModel, Field, model_validator
 
 # Suppress the specific warning about field name shadowing
 warnings.filterwarnings(
     "ignore",
-    message='Field name "schema" in "JSONSchema" shadows an attribute in parent "BaseModel"',
+    message='Field name "schema" in "JSONSchema" '
+    'shadows an attribute in parent "BaseModel"',
 )
 
 
@@ -30,7 +31,8 @@ class JSONSchema(BaseModel):
 
     schema: Optional[Dict[str, Any]] = Field(
         None,
-        description="The schema for the response format, described as a JSON Schema object.",
+        description="The schema for the response "
+        "format, described as a JSON Schema object.",
     )
 
     strict: bool | None = Field(

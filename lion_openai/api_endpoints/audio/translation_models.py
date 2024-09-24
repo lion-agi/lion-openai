@@ -1,7 +1,9 @@
-from typing import Optional, IO
-from pydantic import Field, field_validator, ConfigDict
+from typing import IO, Optional
+
+from pydantic import ConfigDict, Field, field_validator
+
 from ..data_models import OpenAIEndpointRequestBody, OpenAIEndpointResponseBody
-from .types import WhisperModel, TranscriptionResponseFormat
+from .types import TranscriptionResponseFormat, WhisperModel
 
 
 class OpenAITranslationRequestBody(OpenAIEndpointRequestBody):
@@ -9,7 +11,8 @@ class OpenAITranslationRequestBody(OpenAIEndpointRequestBody):
     model: WhisperModel = Field(description="The model to use for translation")
     prompt: Optional[str] = Field(
         None,
-        description="An optional text to guide the model's style or continue a previous audio segment",
+        description="An optional text to guide the model's style "
+        "or continue a previous audio segment",
     )
     response_format: TranscriptionResponseFormat = Field(
         default="json",

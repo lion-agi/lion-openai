@@ -1,13 +1,15 @@
 from typing import Dict, List, Optional
-from pydantic import Field, model_validator, SerializeAsAny
+
+from pydantic import Field, SerializeAsAny, model_validator
+
 from ...data_models import OpenAIEndpointRequestBody
-from .types import ServiceTier
-from .types import ToolChoice as ToolChoiceStr
 from .message_models import Message
-from .tool_models import Tool
-from .tool_choice_models import ToolChoice as ToolChoiceObj
 from .response_format import ResponseFormat
 from .stream_options import StreamOptions
+from .tool_choice_models import ToolChoice as ToolChoiceObj
+from .tool_models import Tool
+from .types import ServiceTier
+from .types import ToolChoice as ToolChoiceStr
 
 
 class OpenAIChatCompletionRequestBody(OpenAIEndpointRequestBody):
@@ -33,8 +35,8 @@ class OpenAIChatCompletionRequestBody(OpenAIEndpointRequestBody):
         description=(
             "Modify the likelihood of specified tokens appearing in the "
             "completion. Accepts a JSON object that maps tokens (specified by "
-            "their token ID in the tokenizer) to an associated bias value from "
-            "-100 to 100."
+            "their token ID in the tokenizer) to an associated "
+            "bias value from -100 to 100."
         ),
     )
 
@@ -193,7 +195,8 @@ class OpenAIChatCompletionRequestBody(OpenAIEndpointRequestBody):
     )
 
     parallel_tool_calls: Optional[bool] = Field(
-        True, decription="Whether to enable parallel function calling during tool use."
+        True,
+        decription="Whether to enable parallel " "function calling during tool use.",
     )
 
     user: Optional[str] = Field(

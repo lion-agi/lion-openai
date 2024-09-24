@@ -1,4 +1,5 @@
 from typing import List, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -36,9 +37,11 @@ class LogProbContent(TokenLogProb):
 class LogProbs(BaseModel):
     content: Optional[List[LogProbContent]] = Field(
         None,
-        description="A list of message content tokens with log probability information.",
+        description="A list of message content "
+        "tokens with log probability information.",
     )
     refusal: Optional[List[LogProbContent]] = Field(
         None,
-        description="A list of message refusal tokens with log probability information.",
+        description="A list of message refusal "
+        "tokens with log probability information.",
     )

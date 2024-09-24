@@ -1,5 +1,5 @@
-from typing import IO
 from pydantic import Field
+
 from ..data_models import OpenAIEndpointPathParam, OpenAIEndpointRequestBody
 
 
@@ -9,4 +9,3 @@ class OpenAIUploadPartPathParam(OpenAIEndpointPathParam):
 
 class OpenAIUploadPartRequestBody(OpenAIEndpointRequestBody):
     data: bytes = Field(description="The chunk of bytes for this Part.")
-

@@ -1,6 +1,8 @@
-from typing import Optional
-from pydantic import Field
 from enum import Enum
+from typing import Optional
+
+from pydantic import Field
+
 from ..data_models import OpenAIEndpointRequestBody
 
 
@@ -14,5 +16,5 @@ class OpenAIModerationRequestBody(OpenAIEndpointRequestBody):
 
     model: Optional[Model] = Field(
         "text-moderation-latest",
-        description="Two content moderations models are available: text-moderation-stable and text-moderation-latest."
+        description="Two content moderations models are available: text-moderation-stable and text-moderation-latest.",
     )

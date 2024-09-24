@@ -1,1 +1,1 @@
-from .request import *
+from .request import *  # noqa

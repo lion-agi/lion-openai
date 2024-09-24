@@ -5,5 +5,5 @@ from .translation_models import OpenAITranslationRequestBody
 __all__ = [
     "OpenAISpeechRequestBody",
     "OpenAITranscriptionRequestBody",
-    "OpenAITranslationRequestBody"
+    "OpenAITranslationRequestBody",
 ]

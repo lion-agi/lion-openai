@@ -1,5 +1,7 @@
-from typing import Optional, List, Literal
+from typing import List, Literal, Optional
+
 from pydantic import Field
+
 from ..data_models import OpenAIEndpointQueryParam, OpenAIEndpointResponseBody
 from .file_models import OpenAIFileResponseBody
 
@@ -18,5 +20,5 @@ class OpenAIListFilesResponseBody(OpenAIEndpointResponseBody):
     )
 
     has_more: bool = Field(
-        description="Whether there are more results available after this batch."
+        description="Whether there are more results" " available after this batch."
     )
