@@ -1,9 +1,7 @@
-from .api_request import OpenAIRequest
-
 imported_models = {}
 
 
-def match_response(request_model: "OpenAIRequest", response: dict | list):
+def match_response(request_model, response: dict | list):
     global imported_models
 
     endpoint = request_model.endpoint
