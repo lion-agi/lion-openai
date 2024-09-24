@@ -25,8 +25,7 @@ class Choice(BaseModel):
     )
 
     logprobs: LogProbs | None = Field(
-        None,
-        description="Log probability information for the choice."
+        None, description="Log probability information for the choice."
     )
 
     model_config = ConfigDict(use_enum_values=True)
