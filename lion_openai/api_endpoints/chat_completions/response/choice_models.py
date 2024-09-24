@@ -25,6 +25,7 @@ class Choice(BaseModel):
     )
 
     logprobs: LogProbs | None = Field(
+        None,
         description="Log probability information for the choice."
     )
 
