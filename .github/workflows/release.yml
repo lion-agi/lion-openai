@@ -46,8 +46,10 @@ jobs:
     - name: Build package
       run: poetry build
     - name: Publish package to PyPI
+
+      run: twine upload --repository pypi dist/*
       env:
-        PYPI_TOKEN: ${{ secrets.PYPI_API_KEY }}
-      run: poetry config pypi-token.pypi $PYPI_TOKEN && poetry publish
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}  # Make sure to use the secret for PyPI
 
 # filepath: .github/workflows/release.yml
