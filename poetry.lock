@@ -567,6 +567,21 @@ files = [
 colors = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "lion-service"
+version = "0.1.1"
+description = ""
+optional = false
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "lion_service-0.1.1-py3-none-any.whl", hash = "sha256:a10286dba8bd59a1ae65cbbda5819175ca78c60cf52fd5a2769fb02e1fc5801e"},
+    {file = "lion_service-0.1.1.tar.gz", hash = "sha256:ecb844ce4a51b87b84b71677cc690b9762a1ddc38c95fb417c1d95fb76abb917"},
+]
+
+[package.dependencies]
+pydantic = ">=2.9.2,<3.0.0"
+tiktoken = ">=0.7.0,<0.8.0"
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -1462,4 +1477,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "26d12a70493421a94c48021adc55e64a761802bb6c1a667a6a74f916ba44363d"
+content-hash = "379a1855551d8ee07225fa54d66fafc585bc366adb775482bc46304f9ec38c45"
