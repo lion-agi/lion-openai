@@ -1,5 +1,9 @@
 # 🦁 lion-openai
 
+[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/lion-openai?color=blue)
+![Discord](https://img.shields.io/discord/1167495547670777866?color=7289da&label=discord&logo=discord)
+
 Welcome to lion-openai, a powerful Python library for seamless integration with OpenAI's APIs. As part of the lion ecosystem, lion-openai provides a robust, type-safe, and user-friendly interface for interacting with OpenAI's services.
 
 ## 🌟 Features
