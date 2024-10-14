@@ -34,9 +34,12 @@ class OpenAIRequest(BaseModel):
     @field_validator("api_key", "openai_organization", "openai_project")
     @classmethod
     def get_id(cls, value: str) -> str:
-        if api_key := getenv(value):
-            return api_key
-        else:
+        try:
+            if api_key := getenv(value):
+                return api_key
+            else:
+                return value
+        except:
             return value
 
     def get_endpoint(self, path_param: OpenAIEndpointPathParam = None):
