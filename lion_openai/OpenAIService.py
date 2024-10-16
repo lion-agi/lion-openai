@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import inspect
 from lion_service import Service, register_service
 
 from lion_openai.api_endpoints.api_request import OpenAIRequest
@@ -73,6 +74,14 @@ class OpenAIService(Service):
     @staticmethod
     def match_data_model(task_name):
         return match_data_model(task_name)
+
+    @classmethod
+    def list_tasks(cls):
+        methods = []
+        for name, member in inspect.getmembers(cls, predicate=inspect.isfunction):
+            if name not in ["__init__", "__setattr__", "check_rate_limiter", "match_data_model"]:
+                methods.append(name)
+        return methods
 
     # Audio
     def create_speech(self, model: str, limit_requests: int = None):
