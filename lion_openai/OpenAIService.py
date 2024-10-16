@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from lion_service import Service, register_service
 
 from lion_openai.api_endpoints.api_request import OpenAIRequest
+from lion_openai.api_endpoints.match_data_model import match_data_model
 
 from .OpenAIModel import OpenAIModel
 
@@ -68,6 +69,10 @@ class OpenAIService(Service):
                 openai_model.rate_limiter.limit_tokens = limit_tokens
 
         return openai_model
+
+    @staticmethod
+    def match_data_model(task_name):
+        return match_data_model(task_name)
 
     # Audio
     def create_speech(self, model: str, limit_requests: int = None):

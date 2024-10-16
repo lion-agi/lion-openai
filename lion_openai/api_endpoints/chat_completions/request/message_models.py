@@ -2,7 +2,7 @@ from typing import List, Literal, Optional, TypeAlias
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .types import Detail, Role
+from .types import Detail
 
 
 class TextContentPart(BaseModel):
@@ -39,12 +39,8 @@ class ToolCall(BaseModel):
     function: Function = Field(description="The function that the model called.")
 
 
-class Message(BaseModel):
-    role: Role = Field(description="The role of the message's author.")
-    model_config = ConfigDict(use_enum_values=True)
-
-
-class SystemMessage(Message):
+class SystemMessage(BaseModel):
+    role: Literal["system"]
     content: str = Field(description="The content of the system message.")
 
     name: Optional[str] = Field(
@@ -55,7 +51,8 @@ class SystemMessage(Message):
     )
 
 
-class UserMessage(Message):
+class UserMessage(BaseModel):
+    role: Literal["user"]
     content: str | List[ContentPart] = Field(
         description="The content of the user message"
     )
@@ -68,7 +65,8 @@ class UserMessage(Message):
     )
 
 
-class AssistantMessage(Message):
+class AssistantMessage(BaseModel):
+    role: Literal["assistant"]
     content: Optional[str] = Field(
         None,
         description="The contents of the assistant message."
@@ -98,9 +96,13 @@ class AssistantMessage(Message):
         return self
 
 
-class ToolMessage(Message):
+class ToolMessage(BaseModel):
+    role: Literal["tool"]
     content: str | list = Field(description="The contents of the tool message.")
 
     tool_calls_id: str = Field(
         description="Tool call that this message is responding to."
     )
+
+
+Message: TypeAlias = SystemMessage | UserMessage | AssistantMessage | ToolMessage
