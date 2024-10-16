@@ -39,7 +39,7 @@ class OpenAIRequest(BaseModel):
                 return api_key
             else:
                 return value
-        except:
+        except Exception:
             return value
 
     def get_endpoint(self, path_param: OpenAIEndpointPathParam = None):
