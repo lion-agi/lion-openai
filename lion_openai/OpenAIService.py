@@ -1,5 +1,6 @@
-from dotenv import load_dotenv
 import inspect
+
+from dotenv import load_dotenv
 from lion_service import Service, register_service
 
 from lion_openai.api_endpoints.api_request import OpenAIRequest
@@ -79,7 +80,12 @@ class OpenAIService(Service):
     def list_tasks(cls):
         methods = []
         for name, member in inspect.getmembers(cls, predicate=inspect.isfunction):
-            if name not in ["__init__", "__setattr__", "check_rate_limiter", "match_data_model"]:
+            if name not in [
+                "__init__",
+                "__setattr__",
+                "check_rate_limiter",
+                "match_data_model",
+            ]:
                 methods.append(name)
         return methods
 
