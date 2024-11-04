@@ -1,17 +1,17 @@
 [tool.poetry]
 name = "lion-openai"
-version = "0.1.0"
+version = "1.0.1"
 description = ""
 authors = ["OceanLi <122793010+ohdearquant@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = "^2.9.2"
 aiohttp = "^3.10.5"
 tiktoken = "^0.7.0"
 pyyaml = "^6.0.2"
 pillow = "^10.4.0"
+lion-service = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -26,8 +26,6 @@ pre-commit = "^3.8.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry.scripts]
-reinstall = "scripts.poetry_reinstall:main"
 
 [tool.black]
 line-length = 88
@@ -38,6 +36,6 @@ profile = "black"
 line_length = 88
 
 [tool.flake8]
-ignore = ["E203", "W503", "E501"]
+ignore = ["E203", "W503", "E501", "E402"]
 max-line-length = 88
 exclude = [".git", "__pycache__", "build", "dist", ".venv"]
