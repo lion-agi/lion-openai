@@ -3,9 +3,8 @@ import inspect
 from dotenv import load_dotenv
 from lion_service import Service, register_service
 
-from lion_openai.api_endpoints.api_request import OpenAIRequest
-from lion_openai.api_endpoints.match_data_model import match_data_model
-
+from .api_request import OpenAIRequest
+from .match_data_model import match_data_model
 from .OpenAIModel import OpenAIModel
 
 load_dotenv()
@@ -79,7 +78,9 @@ class OpenAIService(Service):
     @classmethod
     def list_tasks(cls):
         methods = []
-        for name, member in inspect.getmembers(cls, predicate=inspect.isfunction):
+        for name, member in inspect.getmembers(
+            cls, predicate=inspect.isfunction
+        ):
             if name not in [
                 "__init__",
                 "__setattr__",
@@ -102,7 +103,9 @@ class OpenAIService(Service):
             limit_requests=limit_requests,
         )
 
-        return self.check_rate_limiter(model_obj, limit_requests=limit_requests)
+        return self.check_rate_limiter(
+            model_obj, limit_requests=limit_requests
+        )
 
     def create_transcription(self, model: str, limit_requests: int = None):
         model_obj = OpenAIModel(
@@ -115,7 +118,9 @@ class OpenAIService(Service):
             limit_requests=limit_requests,
         )
 
-        return self.check_rate_limiter(model_obj, limit_requests=limit_requests)
+        return self.check_rate_limiter(
+            model_obj, limit_requests=limit_requests
+        )
 
     def create_translation(self, model: str, limit_requests: int = None):
         model_obj = OpenAIModel(
@@ -128,7 +133,9 @@ class OpenAIService(Service):
             limit_requests=limit_requests,
         )
 
-        return self.check_rate_limiter(model_obj, limit_requests=limit_requests)
+        return self.check_rate_limiter(
+            model_obj, limit_requests=limit_requests
+        )
 
     # Chat
     def create_chat_completion(

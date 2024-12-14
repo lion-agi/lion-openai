@@ -6,23 +6,24 @@ from dotenv import load_dotenv
 from lion_service.rate_limiter import RateLimiter, RateLimitError
 from lion_service.service_util import invoke_retry
 from lion_service.token_calculator import TiktokenCalculator
-from pydantic import BaseModel, ConfigDict, Field, field_serializer, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_serializer,
+    model_validator,
+)
 
-from lion_openai.api_endpoints.api_request import OpenAIRequest
-from lion_openai.api_endpoints.chat_completions.request.request_body import (
+from .api_request import OpenAIRequest
+from .chat_completions.request.request_body import (
     OpenAIChatCompletionRequestBody,
     StreamOptions,
 )
-from lion_openai.api_endpoints.chat_completions.util import (
-    get_images,
-    get_text_messages,
-)
-from lion_openai.api_endpoints.data_models import OpenAIEndpointRequestBody
-from lion_openai.api_endpoints.embeddings.request_body import OpenAIEmbeddingRequestBody
-from lion_openai.api_endpoints.match_response import match_response
-from lion_openai.image_token_calculator.image_token_calculator import (
-    OpenAIImageTokenCalculator,
-)
+from .chat_completions.util import get_images, get_text_messages
+from .data_models import OpenAIEndpointRequestBody
+from .embeddings.request_body import OpenAIEmbeddingRequestBody
+from .image_token_calculator import OpenAIImageTokenCalculator
+from .match_response import match_response
 
 load_dotenv()
 path = Path(__file__).parent
@@ -36,7 +37,9 @@ class OpenAIModel(BaseModel):
 
     request_model: OpenAIRequest = Field(description="Making requests")
 
-    rate_limiter: RateLimiter = Field(description="Rate Limiter to track usage")
+    rate_limiter: RateLimiter = Field(
+        description="Rate Limiter to track usage"
+    )
 
     text_token_calculator: TiktokenCalculator = Field(
         default=None, description="Token Calculator"
@@ -131,7 +134,8 @@ class OpenAIModel(BaseModel):
             estimated_output_len = request_body.max_completion_tokens
 
         invoke_viability_result = self.verify_invoke_viability(
-            input_tokens_len=input_token_len, estimated_output_len=estimated_output_len
+            input_tokens_len=input_token_len,
+            estimated_output_len=estimated_output_len,
         )
         if not invoke_viability_result:
             raise RateLimitError("Rate limit reached for requests")
@@ -139,22 +143,28 @@ class OpenAIModel(BaseModel):
         try:
             if getattr(request_body, "stream", None):
                 return await self.stream(
-                    request_body, output_file=output_file, parse_response=parse_response
+                    request_body,
+                    output_file=output_file,
+                    parse_response=parse_response,
                 )
 
             if getattr(request_body, "file", None):
-                response_body, response_headers = await self.request_model.invoke(
-                    form_data=request_body,
-                    output_file=output_file,
-                    with_response_header=True,
-                    parse_response=False,
+                response_body, response_headers = (
+                    await self.request_model.invoke(
+                        form_data=request_body,
+                        output_file=output_file,
+                        with_response_header=True,
+                        parse_response=False,
+                    )
                 )
             else:
-                response_body, response_headers = await self.request_model.invoke(
-                    json_data=request_body,
-                    output_file=output_file,
-                    with_response_header=True,
-                    parse_response=False,
+                response_body, response_headers = (
+                    await self.request_model.invoke(
+                        json_data=request_body,
+                        output_file=output_file,
+                        with_response_header=True,
+                        parse_response=False,
+                    )
                 )
 
             self.check_limits_info(response_headers)
@@ -168,10 +178,14 @@ class OpenAIModel(BaseModel):
                         response_headers.get("Date"), total_token_usage
                     )
                 else:  # No Token limits condition (request limit only)
-                    self.rate_limiter.update_rate_limit(response_headers.get("Date"))
+                    self.rate_limiter.update_rate_limit(
+                        response_headers.get("Date")
+                    )
             else:
                 # for audio/speech endpoint (without response body object)
-                self.rate_limiter.update_rate_limit(response_headers.get("Date"))
+                self.rate_limiter.update_rate_limit(
+                    response_headers.get("Date")
+                )
 
             self.check_remaining_info(response_headers)
 
@@ -194,11 +208,17 @@ class OpenAIModel(BaseModel):
 
         stream_options_included = bool(getattr(request_body, "stream_options"))
         if not stream_options_included:
-            setattr(request_body, "stream_options", StreamOptions(include_usage=True))
+            setattr(
+                request_body,
+                "stream_options",
+                StreamOptions(include_usage=True),
+            )
 
         response_list = []
         async for chunk in self.request_model.stream(
-            json_data=request_body, output_file=output_file, with_response_header=True
+            json_data=request_body,
+            output_file=output_file,
+            with_response_header=True,
         ):
             response_list.append(chunk)
 
@@ -219,7 +239,9 @@ class OpenAIModel(BaseModel):
         else:
             return response_list
 
-    async def get_input_token_len(self, request_body: OpenAIEndpointRequestBody):
+    async def get_input_token_len(
+        self, request_body: OpenAIEndpointRequestBody
+    ):
         if request_model := getattr(request_body, "model"):
             if request_model != self.model:
                 raise ValueError(
@@ -235,11 +257,15 @@ class OpenAIModel(BaseModel):
             image_tokens = 0
             for url, detail in image_urls:
                 if self.image_token_calculator:
-                    image_tokens += await self.image_token_calculator.calculate(
-                        url, detail
+                    image_tokens += (
+                        await self.image_token_calculator.calculate(
+                            url, detail
+                        )
                     )
                 else:
-                    raise ValueError("The model does not have vision capabilities.")
+                    raise ValueError(
+                        "The model does not have vision capabilities."
+                    )
 
             return text_tokens + image_tokens
         elif isinstance(request_body, OpenAIEmbeddingRequestBody):
@@ -273,14 +299,16 @@ class OpenAIModel(BaseModel):
             else self.estimated_output_len
         )
         if estimated_output_len == 0:
-            with open(max_output_token_file_name, "r") as file:
+            with open(max_output_token_file_name) as file:
                 output_token_config = yaml.safe_load(file)
                 estimated_output_len = output_token_config.get(self.model, 0)
                 self.estimated_output_len = (
                     estimated_output_len  # update to default max output len
                 )
 
-        if self.rate_limiter.check_availability(input_tokens_len, estimated_output_len):
+        if self.rate_limiter.check_availability(
+            input_tokens_len, estimated_output_len
+        ):
             return True
         else:
             return False
@@ -337,7 +365,9 @@ class OpenAIModel(BaseModel):
                     response_headers.get("x-ratelimit-remaining-requests")
                 )
                 for i in range(request_diff):
-                    self.rate_limiter.update_rate_limit(response_headers.get("Date"))
+                    self.rate_limiter.update_rate_limit(
+                        response_headers.get("Date")
+                    )
 
     def estimate_text_price(
         self,
@@ -354,7 +384,7 @@ class OpenAIModel(BaseModel):
         num_of_input_tokens = self.text_token_calculator.calculate(input_text)
 
         # read openai price info from config file
-        with open(price_config_file_name, "r") as file:
+        with open(price_config_file_name) as file:
             price_config = yaml.safe_load(file)
 
         if self.request_model.endpoint == "chat/completions":
