@@ -5,7 +5,9 @@ from pydantic import BaseModel, Field
 
 class Function(BaseModel):
     name: str = Field(description="The name of the function to call.")
-    arguments: str = Field(description="The arguments to pass to the function.")
+    arguments: str = Field(
+        description="The arguments to pass to the function."
+    )
 
 
 class ToolCall(BaseModel):

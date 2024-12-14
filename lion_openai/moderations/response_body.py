@@ -72,7 +72,9 @@ class CategoryScores(BaseModel):
         description="The score for the category 'hate/threatening'.",
     )
 
-    harassment: float = Field(description="The score for the category 'harassment'.")
+    harassment: float = Field(
+        description="The score for the category 'harassment'."
+    )
 
     harassment_threatening: float = Field(
         alias="harassment/threatening",
@@ -101,7 +103,9 @@ class CategoryScores(BaseModel):
         description="The score for the category 'sexual/minors'.",
     )
 
-    violence: float = Field(description="The score for the category 'violence'.")
+    violence: float = Field(
+        description="The score for the category 'violence'."
+    )
 
     violence_graphic: float = Field(
         alias="violence/graphic",
@@ -124,6 +128,10 @@ class Result(BaseModel):
 
 
 class OpenAIModerationResponseBody(OpenAIEndpointResponseBody):
-    id: str = Field(description="The unique identifier for the moderation request.")
-    model: str = Field(description="The model used to generate the moderation results.")
+    id: str = Field(
+        description="The unique identifier for the moderation request."
+    )
+    model: str = Field(
+        description="The model used to generate the moderation results."
+    )
     results: list[Result] = Field(description="A list of moderation objects.")

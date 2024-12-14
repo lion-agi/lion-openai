@@ -126,7 +126,8 @@ class OpenAIChatCompletionRequestBody(OpenAIEndpointRequestBody):
         None,
         max_items=4,
         description=(
-            "Up to 4 sequences where the API will stop generating further " "tokens."
+            "Up to 4 sequences where the API will stop generating further "
+            "tokens."
         ),
     )
 
@@ -194,7 +195,8 @@ class OpenAIChatCompletionRequestBody(OpenAIEndpointRequestBody):
 
     parallel_tool_calls: bool | None = Field(
         True,
-        decription="Whether to enable parallel " "function calling during tool use.",
+        decription="Whether to enable parallel "
+        "function calling during tool use.",
     )
 
     user: str | None = Field(

@@ -7,7 +7,9 @@ from .batch_models import OpenAIBatchResponseBody
 
 
 class OpenAIListBatchQueryParam(OpenAIEndpointQueryParam):
-    after: str | None = Field(None, description="A cursor for use in pagination. ")
+    after: str | None = Field(
+        None, description="A cursor for use in pagination. "
+    )
 
     limit: int | None = Field(
         default=20,
@@ -30,5 +32,6 @@ class OpenAIListBatchResponseBody(OpenAIEndpointResponseBody):
     last_id: str = Field(description="The last object id in the list")
 
     has_more: bool = Field(
-        description="Whether there are more results " "available after this batch."
+        description="Whether there are more results "
+        "available after this batch."
     )

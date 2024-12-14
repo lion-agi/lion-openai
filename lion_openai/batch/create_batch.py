@@ -17,7 +17,8 @@ class OpenAIBatchRequestBody(OpenAIEndpointRequestBody):
     )
 
     completion_window: Literal["24h"] = Field(
-        description="The time frame within which the batch" " should be processed."
+        description="The time frame within which the batch"
+        " should be processed."
     )
 
     metadata: dict | None = Field(

@@ -18,7 +18,9 @@ class OpenAIUploadFileRequestBody(OpenAIEndpointRequestBody):
         description="The File object (not file name) to be uploaded."
     )
 
-    purpose: Purpose = Field(description="The intended purpose of the uploaded file.")
+    purpose: Purpose = Field(
+        description="The intended purpose of the uploaded file."
+    )
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

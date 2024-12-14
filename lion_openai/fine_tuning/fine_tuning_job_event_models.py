@@ -19,7 +19,9 @@ class OpenAIFineTuningJobEventResponseBody(OpenAIEndpointResponseBody):
         description="The object type, always 'fine_tuning.job.event'.",
     )
 
-    message: str = Field(..., description="The message associated with the event.")
+    message: str = Field(
+        ..., description="The message associated with the event."
+    )
 
     # TODO: check Job Event Response
     data: dict | None = Field(

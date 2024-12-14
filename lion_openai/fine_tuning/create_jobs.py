@@ -6,7 +6,9 @@ from ..data_models import OpenAIEndpointRequestBody
 
 
 class Wandb(BaseModel):
-    project: str = Field(description="The name of the project for the new run.")
+    project: str = Field(
+        description="The name of the project for the new run."
+    )
 
     name: str | None = Field(None, description="A display name for the run.")
 
@@ -22,10 +24,13 @@ class Wandb(BaseModel):
 
 class Integration(BaseModel):
     type: Literal["wandb"] = Field(
-        description="The type of integration to enable." " Only 'wandb' is supported."
+        description="The type of integration to enable."
+        " Only 'wandb' is supported."
     )
 
-    wandb: Wandb = Field(description="Settings for Weights and Biases integration.")
+    wandb: Wandb = Field(
+        description="Settings for Weights and Biases integration."
+    )
 
 
 class Hyperparameters(BaseModel):

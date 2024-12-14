@@ -3,12 +3,18 @@ from typing import IO
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from ..data_models import OpenAIEndpointRequestBody, OpenAIEndpointResponseBody
-from .base import TimestampGranularity, TranscriptionResponseFormat, WhisperModel
+from .base import (
+    TimestampGranularity,
+    TranscriptionResponseFormat,
+    WhisperModel,
+)
 
 
 class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
     file: str | IO = Field(description="The audio file to transcribe")
-    model: WhisperModel = Field(description="The model to use for transcription")
+    model: WhisperModel = Field(
+        description="The model to use for transcription"
+    )
     language: str | None = Field(
         None, description="The language of the input audio (ISO-639-1 format)"
     )
@@ -26,7 +32,8 @@ class OpenAITranscriptionRequestBody(OpenAIEndpointRequestBody):
     )
     timestamp_granularities: list[TimestampGranularity] | None = Field(
         default=["segment"],
-        description="The timestamp granularities to populate " "for this transcription",
+        description="The timestamp granularities to populate "
+        "for this transcription",
     )
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -74,7 +81,9 @@ class OpenAIVerboseTranscriptionResponseBody(OpenAIEndpointResponseBody):
     language: str = Field(
         description="The detected or specified language of the input audio"
     )
-    duration: float = Field(description="The duration of the input audio in seconds")
+    duration: float = Field(
+        description="The duration of the input audio in seconds"
+    )
     text: str = Field(description="The transcribed text")
     words: list[Word] | None = Field(None, description="Word-level timestamps")
     segments: list[Segment] | None = Field(description="Segment-level details")
@@ -97,7 +106,8 @@ class OpenAIVerboseTranscriptionResponseBody(OpenAIEndpointResponseBody):
                         "start": 0.0,
                         "end": 3.319999933242798,
                         "text": (
-                            " The beach was a popular " "spot on a hot summer day."
+                            " The beach was a popular "
+                            "spot on a hot summer day."
                         ),
                         "tokens": [
                             50364,

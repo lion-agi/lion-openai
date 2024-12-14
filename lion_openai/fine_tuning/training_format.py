@@ -19,7 +19,9 @@ class OpenAIChatModelTrainingFormat(BaseModel):
 
 
 class OpenAICompletionsModelTrainingFormat(BaseModel):
-    prompt: str = Field(description="The input prompt for this training example.")
+    prompt: str = Field(
+        description="The input prompt for this training example."
+    )
 
     completion: str = Field(
         description="The desired completion for this training example."

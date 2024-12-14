@@ -36,7 +36,9 @@ class OpenAIEmbeddingResponseBody(OpenAIEndpointResponseBody):
     object: Literal["list"] = Field(
         description='The object type, which is always "list" for embeddings.'
     )
-    data: list[EmbeddingObject] = Field(description="The list of embedding objects.")
+    data: list[EmbeddingObject] = Field(
+        description="The list of embedding objects."
+    )
     model: str = Field(
         description="The ID of the model used to generate the embeddings."
     )

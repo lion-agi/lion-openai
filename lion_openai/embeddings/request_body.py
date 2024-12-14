@@ -61,7 +61,9 @@ class OpenAIEmbeddingRequestBody(OpenAIEndpointRequestBody):
             if len(self.input) == 0:
                 raise ValueError("Input array cannot be empty.")
             if isinstance(self.input[0], list) and len(self.input) > 2048:
-                raise ValueError("Input array must be 2048 dimensions or less.")
+                raise ValueError(
+                    "Input array must be 2048 dimensions or less."
+                )
         return self
 
     model_config = ConfigDict(

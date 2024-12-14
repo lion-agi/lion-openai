@@ -15,7 +15,9 @@ from .match_response import match_response
 
 class OpenAIRequest(BaseModel):
 
-    api_key: str = Field(description="API key for authentication", exclude=True)
+    api_key: str = Field(
+        description="API key for authentication", exclude=True
+    )
 
     openai_organization: str | None = Field(
         default=None, description="Organization id", exclude=True
@@ -29,7 +31,9 @@ class OpenAIRequest(BaseModel):
 
     method: str = Field(description="HTTP method")
 
-    content_type: str | None = Field(default=None, description="HTTP Content-Type")
+    content_type: str | None = Field(
+        default=None, description="HTTP Content-Type"
+    )
 
     @field_validator("api_key", "openai_organization", "openai_project")
     @classmethod
@@ -85,7 +89,9 @@ class OpenAIRequest(BaseModel):
 
         url = self.base_url + self.get_endpoint(path_param)
         headers = get_headers()
-        json_data = json_data.model_dump(exclude_unset=True) if json_data else None
+        json_data = (
+            json_data.model_dump(exclude_unset=True) if json_data else None
+        )
         params = params.model_dump(exclude_unset=True) if params else None
         form_data = parse_form_data(form_data) if form_data else None
 
@@ -157,7 +163,10 @@ class OpenAIRequest(BaseModel):
                             f"to {output_file}. Error:{e}"
                         )
                 if self.endpoint != "audio/speech":
-                    if response.headers.get("Content-Type") == "application/json":
+                    if (
+                        response.headers.get("Content-Type")
+                        == "application/json"
+                    ):
                         response_body = await response.json()
                     else:
                         response_body = await response.text()
@@ -204,7 +213,9 @@ class OpenAIRequest(BaseModel):
 
         url = self.base_url + self.get_endpoint()
         headers = get_headers()
-        json_data = json_data.model_dump(exclude_unset=True) if json_data else None
+        json_data = (
+            json_data.model_dump(exclude_unset=True) if json_data else None
+        )
 
         async with aiohttp.ClientSession() as client:
             async with client.request(
@@ -246,9 +257,9 @@ class OpenAIRequest(BaseModel):
                                 c_dict = json.loads(c)
                                 if verbose:
                                     if c_dict.get("choices"):
-                                        if content := c_dict["choices"][0]["delta"].get(
-                                            "content"
-                                        ):
+                                        if content := c_dict["choices"][0][
+                                            "delta"
+                                        ].get("content"):
                                             print(content, end="", flush=True)
                                 yield c_dict
 

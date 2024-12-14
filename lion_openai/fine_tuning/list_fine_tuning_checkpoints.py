@@ -7,7 +7,9 @@ from ..data_models import (
     OpenAIEndpointQueryParam,
     OpenAIEndpointResponseBody,
 )
-from .fine_tuning_job_checkpoint_models import OpenAIFineTuningJobCheckpointResponseBody
+from .fine_tuning_job_checkpoint_models import (
+    OpenAIFineTuningJobCheckpointResponseBody,
+)
 
 
 class OpenAIListFineTuningCheckpointsPathParam(OpenAIEndpointPathParam):

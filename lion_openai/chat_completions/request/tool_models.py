@@ -48,6 +48,7 @@ class Function(BaseModel):
 
 class Tool(BaseModel):
     type: Literal["function"] = Field(
-        description="The type of the tool. Currently," " only function is supported."
+        description="The type of the tool. Currently,"
+        " only function is supported."
     )
     function: Function = Field(description="The function definition.")

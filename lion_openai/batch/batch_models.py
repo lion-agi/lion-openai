@@ -63,7 +63,8 @@ class OpenAIBatchResponseBody(OpenAIEndpointResponseBody):
 
     completion_window: str | None = Field(
         None,
-        description="The time frame within which the batch " "should be processed.",
+        description="The time frame within which the batch "
+        "should be processed.",
     )
 
     status: str = Field(description="The current status of the batch.")
@@ -112,12 +113,14 @@ class OpenAIBatchResponseBody(OpenAIEndpointResponseBody):
 
     failed_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for" " when the batch failed.",
+        description="The Unix timestamp (in seconds) for"
+        " when the batch failed.",
     )
 
     expired_at: int | None = Field(
         None,
-        description="The Unix timestamp (in seconds) for" " when the batch expired.",
+        description="The Unix timestamp (in seconds) for"
+        " when the batch expired.",
     )
 
     cancelling_at: int | None = Field(
@@ -133,9 +136,11 @@ class OpenAIBatchResponseBody(OpenAIEndpointResponseBody):
     )
 
     request_counts: RequestCounts = Field(
-        description="The request counts for different statuses" " within the batch."
+        description="The request counts for different statuses"
+        " within the batch."
     )
 
     metadata: dict | None = Field(
-        description="Set of 16 key-value pairs that can be" " attached to an object."
+        description="Set of 16 key-value pairs that can be"
+        " attached to an object."
     )

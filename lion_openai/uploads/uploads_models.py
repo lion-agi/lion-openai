@@ -13,7 +13,9 @@ class OpenAIUploadResponseBody(OpenAIEndpointResponseBody):
 
     filename: str = Field(description="The name of the file to be uploaded.")
 
-    bytes: int = Field(description="The intended number of bytes to be uploaded.")
+    bytes: int = Field(
+        description="The intended number of bytes to be uploaded."
+    )
 
     purpose: Purpose = Field(description="The intended purpose of the file.")
 
@@ -23,7 +25,9 @@ class OpenAIUploadResponseBody(OpenAIEndpointResponseBody):
         description="The Unix timestamp (in seconds) for when the Upload expires."
     )
 
-    object: str = Field(description="The object type, which is always 'upload'.")
+    object: str = Field(
+        description="The object type, which is always 'upload'."
+    )
 
     file: OpenAIFileResponseBody | None = Field(
         None, description="The File object created after completion."
@@ -41,4 +45,6 @@ class OpenAIUploadPartResponseBody(OpenAIUploadResponseBody):
         description="The ID of the Upload object that this Part was added to."
     )
 
-    object: str = Field(description="The object type, which is always 'upload.part'.")
+    object: str = Field(
+        description="The object type, which is always 'upload.part'."
+    )

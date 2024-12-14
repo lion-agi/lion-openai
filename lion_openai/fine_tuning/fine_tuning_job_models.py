@@ -16,9 +16,13 @@ class Status(str, Enum):
 
 
 class Error(BaseModel):
-    code: str | None = Field(None, description="A machine-readable error code.")
+    code: str | None = Field(
+        None, description="A machine-readable error code."
+    )
 
-    message: str | None = Field(None, description="A human-readable error message.")
+    message: str | None = Field(
+        None, description="A human-readable error message."
+    )
 
     param: str | None = Field(
         None, description="The parameter that was invalid, if applicable."
@@ -31,7 +35,9 @@ class Hyperparameters(BaseModel):
     )
 
     # TODO: check hyperparameters
-    batch_size: Literal["auto"] | int = Field(None, description="The batch size.")
+    batch_size: Literal["auto"] | int = Field(
+        None, description="The batch size."
+    )
 
     learning_rate_multiplier: Literal["auto"] | int = Field(
         None, description="The learning rate multiplier."
@@ -41,17 +47,23 @@ class Hyperparameters(BaseModel):
 
 
 class Wandb(BaseModel):
-    project: str = Field(..., description="The name of the project for the new run.")
+    project: str = Field(
+        ..., description="The name of the project for the new run."
+    )
 
     name: str | None = Field(None, description="A display name for the run.")
 
-    entity: str | None = Field(None, description="The entity to use for the run.")
+    entity: str | None = Field(
+        None, description="The entity to use for the run."
+    )
 
     tags: list[str] | None = Field(description="A list of tags for the run.")
 
 
 class Integration(BaseModel):
-    type: str = Field(..., description="The type of the integration being enabled.")
+    type: str = Field(
+        ..., description="The type of the integration being enabled."
+    )
 
     wandb: Wandb | None = Field(
         None, description="Settings for Weights and Biases integration."
@@ -67,7 +79,9 @@ class OpenAIFineTuningJobResponseBody(OpenAIEndpointResponseBody):
         ..., description="The Unix timestamp (in seconds) of job creation."
     )
 
-    error: Error | None = Field(None, description="Error information for failed jobs.")
+    error: Error | None = Field(
+        None, description="Error information for failed jobs."
+    )
 
     fine_tuned_model: str | None = Field(
         None, description="The name of the fine-tuned model being created."
@@ -116,7 +130,9 @@ class OpenAIFineTuningJobResponseBody(OpenAIEndpointResponseBody):
         None, description="A list of integrations enabled for this job."
     )
 
-    seed: int = Field(None, description="The seed used for the fine-tuning job.")
+    seed: int = Field(
+        None, description="The seed used for the fine-tuning job."
+    )
 
     estimated_finish: int | None = Field(
         None,

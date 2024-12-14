@@ -6,8 +6,12 @@ from .base import AudioFormat, TTSModel, Voice
 
 class OpenAISpeechRequestBody(OpenAIEndpointRequestBody):
     model: TTSModel = Field(description="The TTS model to use")
-    input: str = Field(description="The text to generate audio for", max_length=4096)
-    voice: Voice = Field(description="The voice to use when generating the audio")
+    input: str = Field(
+        description="The text to generate audio for", max_length=4096
+    )
+    voice: Voice = Field(
+        description="The voice to use when generating the audio"
+    )
     response_format: AudioFormat = Field(
         default=AudioFormat.MP3,
         description="The format of the generated audio",

@@ -6,7 +6,9 @@ from ..data_models import OpenAIEndpointResponseBody
 
 
 class Metrics(BaseModel):
-    step: int = Field(description="The step number associated with these metrics.")
+    step: int = Field(
+        description="The step number associated with these metrics."
+    )
 
     train_loss: float = Field(description="The training loss at this step.")
 
@@ -19,7 +21,9 @@ class Metrics(BaseModel):
         description="The mean token accuracy during validation at this step."
     )
 
-    full_valid_loss: float = Field(description="The full validation loss at this step.")
+    full_valid_loss: float = Field(
+        description="The full validation loss at this step."
+    )
 
     full_valid_mean_token_accuracy: float = Field(
         description="The full mean token accuracy during validation at this step."
@@ -41,7 +45,9 @@ class OpenAIFineTuningJobCheckpointResponseBody(OpenAIEndpointResponseBody):
         description="The step number of this checkpoint in the fine-tuning process.",
     )
 
-    metrics: Metrics = Field(description="Metrics associated with the checkpoint.")
+    metrics: Metrics = Field(
+        description="Metrics associated with the checkpoint."
+    )
 
     fine_tuning_job_id: str = Field(
         description="The ID of the fine-tuning job this checkpoint belongs to."

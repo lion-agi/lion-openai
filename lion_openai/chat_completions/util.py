@@ -9,7 +9,9 @@ def get_text_messages(request_body: OpenAIChatCompletionRequestBody):
         role = msg.get("role", "")
         content = msg.get("content", "")
 
-        if isinstance(content, list):  # Check if content is a list (second example)
+        if isinstance(
+            content, list
+        ):  # Check if content is a list (second example)
             content_str = []
             for sub_content in content:
                 if sub_content.get("type") == "text":
@@ -32,7 +34,9 @@ def get_images(request_body: OpenAIChatCompletionRequestBody):
     for msg in messages_list:
         content = msg.get("content", "")
 
-        if isinstance(content, list):  # Check if content is a list (second example)
+        if isinstance(
+            content, list
+        ):  # Check if content is a list (second example)
             for sub_content in content:
                 if sub_content.get("type") == "image_url":
                     image_url = sub_content.get("image_url")

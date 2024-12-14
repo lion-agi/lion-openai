@@ -7,7 +7,9 @@ from .base import Endpoint
 
 
 class Response(BaseModel):
-    status_code: int = Field(description="The HTTP status code of the response.")
+    status_code: int = Field(
+        description="The HTTP status code of the response."
+    )
 
     request_id: str = Field(
         description="An unique identifier for the OpenAI API request. "
@@ -36,7 +38,8 @@ class OpenAIBatchRequestInputObject(BaseModel):
     )
 
     url: Endpoint = Field(
-        description="The OpenAI API relative URL to be" " used for the request."
+        description="The OpenAI API relative URL to be"
+        " used for the request."
     )
 
     body: SerializeAsAny[OpenAIEndpointRequestBody] = Field(
@@ -52,7 +55,9 @@ class OpenAIBatchRequestOutputObject(BaseModel):
         " that will be used to match outputs to inputs."
     )
 
-    response: Response | None = Field(description="The endpoint response body.")
+    response: Response | None = Field(
+        description="The endpoint response body."
+    )
 
     error: Error | None = Field(
         description="For requests that failed with a non-HTTP error, "

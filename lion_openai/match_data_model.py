@@ -22,7 +22,9 @@ def match_data_model(task_name):
 
         return {"request_body": OpenAIEmbeddingRequestBody}
     elif task_name == "create_fine_tuning_job":
-        from .fine_tuning.create_jobs import OpenAICreateFineTuningJobRequestBody
+        from .fine_tuning.create_jobs import (
+            OpenAICreateFineTuningJobRequestBody,
+        )
 
         return {"json_data": OpenAICreateFineTuningJobRequestBody}
     elif task_name == "list_fine_tuning_jobs":
@@ -52,7 +54,9 @@ def match_data_model(task_name):
             "path_param": OpenAIListFineTuningCheckpointsPathParam,
         }
     elif task_name == "retrieve_fine_tuning_job":
-        from .fine_tuning.retrieve_jobs import OpenAIRetrieveFineTuningJobPathParam
+        from .fine_tuning.retrieve_jobs import (
+            OpenAIRetrieveFineTuningJobPathParam,
+        )
 
         return {"path_param": OpenAIRetrieveFineTuningJobPathParam}
     elif task_name == "cancel_fine_tuning":
@@ -128,7 +132,9 @@ def match_data_model(task_name):
 
         return {"form_data": OpenAIImageEditRequestBody}
     elif task_name == "create_image_variation":
-        from .images.image_variation_models import OpenAIImageVariationRequestBody
+        from .images.image_variation_models import (
+            OpenAIImageVariationRequestBody,
+        )
 
         return {"form_data": OpenAIImageVariationRequestBody}
     elif task_name == "list_models":
@@ -138,7 +144,9 @@ def match_data_model(task_name):
 
         return {"path_param": OpenAIRetrieveModelPathParam}
     elif task_name == "delete_fine_tuned_model":
-        from .models.delete_fine_tuned_model import OpenAIDeleteFineTunedModelPathParam
+        from .models.delete_fine_tuned_model import (
+            OpenAIDeleteFineTunedModelPathParam,
+        )
 
         return {"path_param": OpenAIDeleteFineTunedModelPathParam}
     elif task_name == "create_moderation":
@@ -146,4 +154,6 @@ def match_data_model(task_name):
 
         return {"json_data": OpenAIModerationRequestBody}
     else:
-        raise ValueError(f"Invalid task: {task_name}. Not supported in the service.")
+        raise ValueError(
+            f"Invalid task: {task_name}. Not supported in the service."
+        )

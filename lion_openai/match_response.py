@@ -21,25 +21,32 @@ def match_response(request_model, response: dict | list):
                     imported_models["OpenAITranscriptionResponseBody"] = (
                         OpenAITranscriptionResponseBody
                     )
-                return imported_models["OpenAITranscriptionResponseBody"](**response)
+                return imported_models["OpenAITranscriptionResponseBody"](
+                    **response
+                )
             else:
                 # verbose transcription object
-                if "OpenAIVerboseTranscriptionResponseBody" not in imported_models:
+                if (
+                    "OpenAIVerboseTranscriptionResponseBody"
+                    not in imported_models
+                ):
                     from .audio.transcription_models import (
                         OpenAIVerboseTranscriptionResponseBody,
                     )
 
-                    imported_models["OpenAIVerboseTranscriptionResponseBody"] = (
-                        OpenAIVerboseTranscriptionResponseBody
-                    )
-                return imported_models["OpenAIVerboseTranscriptionResponseBody"](
-                    **response
-                )
+                    imported_models[
+                        "OpenAIVerboseTranscriptionResponseBody"
+                    ] = OpenAIVerboseTranscriptionResponseBody
+                return imported_models[
+                    "OpenAIVerboseTranscriptionResponseBody"
+                ](**response)
 
         # create translation
         if endpoint == "audio/translations":
             if "OpenAITranslationResponseBody" not in imported_models:
-                from .audio.translation_models import OpenAITranslationResponseBody
+                from .audio.translation_models import (
+                    OpenAITranslationResponseBody,
+                )
 
                 imported_models["OpenAITranslationResponseBody"] = (
                     OpenAITranslationResponseBody
@@ -57,7 +64,9 @@ def match_response(request_model, response: dict | list):
                 imported_models["OpenAIChatCompletionResponseBody"] = (
                     OpenAIChatCompletionResponseBody
                 )
-            return imported_models["OpenAIChatCompletionResponseBody"](**response)
+            return imported_models["OpenAIChatCompletionResponseBody"](
+                **response
+            )
         else:
             # stream list
             if "OpenAIChatCompletionChunkResponseBody" not in imported_models:
@@ -71,7 +80,9 @@ def match_response(request_model, response: dict | list):
             result = []
             for item in response:
                 result.append(
-                    imported_models["OpenAIChatCompletionChunkResponseBody"](**item)
+                    imported_models["OpenAIChatCompletionChunkResponseBody"](
+                        **item
+                    )
                 )
             return result
 
@@ -80,7 +91,9 @@ def match_response(request_model, response: dict | list):
         if "OpenAIEmbeddingResponseBody" not in imported_models:
             from .embeddings.response_body import OpenAIEmbeddingResponseBody
 
-            imported_models["OpenAIEmbeddingResponseBody"] = OpenAIEmbeddingResponseBody
+            imported_models["OpenAIEmbeddingResponseBody"] = (
+                OpenAIEmbeddingResponseBody
+            )
         return imported_models["OpenAIEmbeddingResponseBody"](**response)
 
     # Fine-tuning
@@ -95,7 +108,9 @@ def match_response(request_model, response: dict | list):
                 imported_models["OpenAIFineTuningJobResponseBody"] = (
                     OpenAIFineTuningJobResponseBody
                 )
-            return imported_models["OpenAIFineTuningJobResponseBody"](**response)
+            return imported_models["OpenAIFineTuningJobResponseBody"](
+                **response
+            )
 
         # list fine-tuning jobs
         if endpoint == "fine_tuning/jobs" and method == "GET":
@@ -107,7 +122,9 @@ def match_response(request_model, response: dict | list):
                 imported_models["OpenAIListFineTuningJobsResponseBody"] = (
                     OpenAIListFineTuningJobsResponseBody
                 )
-            return imported_models["OpenAIListFineTuningJobsResponseBody"](**response)
+            return imported_models["OpenAIListFineTuningJobsResponseBody"](
+                **response
+            )
 
         # list fine-tuning events
         if endpoint == "fine_tuning/jobs/{fine_tuning_job_id}/events":
@@ -119,21 +136,26 @@ def match_response(request_model, response: dict | list):
                 imported_models["OpenAIListFineTuningEventsResponseBody"] = (
                     OpenAIListFineTuningEventsResponseBody
                 )
-            return imported_models["OpenAIListFineTuningEventsResponseBody"](**response)
+            return imported_models["OpenAIListFineTuningEventsResponseBody"](
+                **response
+            )
 
         # list fine-tuning checkpoints
         if endpoint == "fine_tuning/jobs/{fine_tuning_job_id}/checkpoints":
-            if "OpenAIListFineTuningCheckpointsResponseBody" not in imported_models:
+            if (
+                "OpenAIListFineTuningCheckpointsResponseBody"
+                not in imported_models
+            ):
                 from .fine_tuning.list_fine_tuning_checkpoints import (
                     OpenAIListFineTuningCheckpointsResponseBody,
                 )
 
-                imported_models["OpenAIListFineTuningCheckpointsResponseBody"] = (
-                    OpenAIListFineTuningCheckpointsResponseBody
-                )
-            return imported_models["OpenAIListFineTuningCheckpointsResponseBody"](
-                **response
-            )
+                imported_models[
+                    "OpenAIListFineTuningCheckpointsResponseBody"
+                ] = OpenAIListFineTuningCheckpointsResponseBody
+            return imported_models[
+                "OpenAIListFineTuningCheckpointsResponseBody"
+            ](**response)
 
         # retrieve fine-tuning job
         if endpoint == "fine_tuning/jobs/{fine_tuning_job_id}":
@@ -145,7 +167,9 @@ def match_response(request_model, response: dict | list):
                 imported_models["OpenAIFineTuningJobResponseBody"] = (
                     OpenAIFineTuningJobResponseBody
                 )
-            return imported_models["OpenAIFineTuningJobResponseBody"](**response)
+            return imported_models["OpenAIFineTuningJobResponseBody"](
+                **response
+            )
 
         # cancel fine-tuning
         # TODO: need verification
@@ -158,7 +182,9 @@ def match_response(request_model, response: dict | list):
                 imported_models["OpenAIFineTuningJobResponseBody"] = (
                     OpenAIFineTuningJobResponseBody
                 )
-            return imported_models["OpenAIFineTuningJobResponseBody"](**response)
+            return imported_models["OpenAIFineTuningJobResponseBody"](
+                **response
+            )
 
     # Batch
     elif "batches" in endpoint:
@@ -176,7 +202,9 @@ def match_response(request_model, response: dict | list):
             if "OpenAIBatchResponseBody" not in imported_models:
                 from .batch.batch_models import OpenAIBatchResponseBody
 
-                imported_models["OpenAIBatchResponseBody"] = OpenAIBatchResponseBody
+                imported_models["OpenAIBatchResponseBody"] = (
+                    OpenAIBatchResponseBody
+                )
             return imported_models["OpenAIBatchResponseBody"](**response)
 
     # Files
@@ -186,7 +214,9 @@ def match_response(request_model, response: dict | list):
             if "OpenAIFileResponseBody" not in imported_models:
                 from .files.file_models import OpenAIFileResponseBody
 
-                imported_models["OpenAIFileResponseBody"] = OpenAIFileResponseBody
+                imported_models["OpenAIFileResponseBody"] = (
+                    OpenAIFileResponseBody
+                )
             return imported_models["OpenAIFileResponseBody"](**response)
 
         # list files
@@ -204,7 +234,9 @@ def match_response(request_model, response: dict | list):
             if "OpenAIFileResponseBody" not in imported_models:
                 from .files.file_models import OpenAIFileResponseBody
 
-                imported_models["OpenAIFileResponseBody"] = OpenAIFileResponseBody
+                imported_models["OpenAIFileResponseBody"] = (
+                    OpenAIFileResponseBody
+                )
             return imported_models["OpenAIFileResponseBody"](**response)
 
         # delete file
@@ -226,7 +258,9 @@ def match_response(request_model, response: dict | list):
         if endpoint == "uploads/{upload_id}/parts":
             # add upload part
             if "OpenAIUploadPartResponseBody" not in imported_models:
-                from .uploads.uploads_models import OpenAIUploadPartResponseBody
+                from .uploads.uploads_models import (
+                    OpenAIUploadPartResponseBody,
+                )
 
                 imported_models["OpenAIUploadPartResponseBody"] = (
                     OpenAIUploadPartResponseBody
@@ -237,7 +271,9 @@ def match_response(request_model, response: dict | list):
             if "OpenAIUploadResponseBody" not in imported_models:
                 from .uploads.uploads_models import OpenAIUploadResponseBody
 
-                imported_models["OpenAIUploadResponseBody"] = OpenAIUploadResponseBody
+                imported_models["OpenAIUploadResponseBody"] = (
+                    OpenAIUploadResponseBody
+                )
             return imported_models["OpenAIUploadResponseBody"](**response)
 
     # Images
@@ -245,7 +281,9 @@ def match_response(request_model, response: dict | list):
         if "OpenAIImageResponseBody" not in imported_models:
             from .images.response_body import OpenAIImageResponseBody
 
-            imported_models["OpenAIImageResponseBody"] = OpenAIImageResponseBody
+            imported_models["OpenAIImageResponseBody"] = (
+                OpenAIImageResponseBody
+            )
         return imported_models["OpenAIImageResponseBody"](**response)
 
     if "models" in endpoint:
@@ -264,7 +302,9 @@ def match_response(request_model, response: dict | list):
             if "OpenAIModelResponseBody" not in imported_models:
                 from .models.models_models import OpenAIModelResponseBody
 
-                imported_models["OpenAIModelResponseBody"] = OpenAIModelResponseBody
+                imported_models["OpenAIModelResponseBody"] = (
+                    OpenAIModelResponseBody
+                )
             return imported_models["OpenAIModelResponseBody"](**response)
 
         # delete a fine-tuned model
@@ -277,7 +317,9 @@ def match_response(request_model, response: dict | list):
                 imported_models["OpenAIDeleteFineTunedModelResponseBody"] = (
                     OpenAIDeleteFineTunedModelResponseBody
                 )
-            return imported_models["OpenAIDeleteFineTunedModelResponseBody"](**response)
+            return imported_models["OpenAIDeleteFineTunedModelResponseBody"](
+                **response
+            )
 
     # Moderation
     if endpoint == "moderations":

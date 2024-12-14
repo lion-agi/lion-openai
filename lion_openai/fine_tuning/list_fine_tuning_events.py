@@ -23,7 +23,9 @@ class OpenAIListFineTuningEventsQueryParam(OpenAIEndpointQueryParam):
         description="Identifier for the last event from the previous pagination request.",
     )
 
-    limit: int | None = Field(20, description="Number of events to retrieve.", ge=1)
+    limit: int | None = Field(
+        20, description="Number of events to retrieve.", ge=1
+    )
 
 
 class OpenAIListFineTuningEventsResponseBody(OpenAIEndpointResponseBody):

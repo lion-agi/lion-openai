@@ -30,7 +30,8 @@ class OpenAIFileResponseBody(OpenAIEndpointResponseBody):
     bytes: int = Field(description="The size of the file, in bytes.")
 
     created_at: int = Field(
-        description="The Unix timestamp (in seconds) for " "when the file was created.",
+        description="The Unix timestamp (in seconds) for "
+        "when the file was created.",
     )
 
     filename: str = Field(description="The name of the file.")

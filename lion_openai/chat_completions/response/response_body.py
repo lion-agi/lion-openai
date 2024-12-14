@@ -48,7 +48,9 @@ class OpenAIChatCompletionResponseBody(OpenAIEndpointResponseBody):
         description="The object type, which is always chat.completion."
     )
 
-    usage: Usage = Field(description="Usage statistics for the completion request.")
+    usage: Usage = Field(
+        description="Usage statistics for the completion request."
+    )
 
 
 class OpenAIChatCompletionChunkResponseBody(OpenAIEndpointResponseBody):
