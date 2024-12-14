@@ -3,9 +3,8 @@ import inspect
 from dotenv import load_dotenv
 from lion_service import Service, register_service
 
-from lion_openai.api_endpoints.api_request import OpenAIRequest
-from lion_openai.api_endpoints.match_data_model import match_data_model
-
+from .api_request import OpenAIRequest
+from .match_data_model import match_data_model
 from .OpenAIModel import OpenAIModel
 
 load_dotenv()

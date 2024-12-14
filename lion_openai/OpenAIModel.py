@@ -8,21 +8,16 @@ from lion_service.service_util import invoke_retry
 from lion_service.token_calculator import TiktokenCalculator
 from pydantic import BaseModel, ConfigDict, Field, field_serializer, model_validator
 
-from lion_openai.api_endpoints.api_request import OpenAIRequest
-from lion_openai.api_endpoints.chat_completions.request.request_body import (
+from .api_request import OpenAIRequest
+from .chat_completions.request.request_body import (
     OpenAIChatCompletionRequestBody,
     StreamOptions,
 )
-from lion_openai.api_endpoints.chat_completions.util import (
-    get_images,
-    get_text_messages,
-)
-from lion_openai.api_endpoints.data_models import OpenAIEndpointRequestBody
-from lion_openai.api_endpoints.embeddings.request_body import OpenAIEmbeddingRequestBody
-from lion_openai.api_endpoints.match_response import match_response
-from lion_openai.image_token_calculator.image_token_calculator import (
-    OpenAIImageTokenCalculator,
-)
+from .chat_completions.util import get_images, get_text_messages
+from .data_models import OpenAIEndpointRequestBody
+from .embeddings.request_body import OpenAIEmbeddingRequestBody
+from .image_token_calculator import OpenAIImageTokenCalculator
+from .match_response import match_response
 
 load_dotenv()
 path = Path(__file__).parent
@@ -131,7 +126,8 @@ class OpenAIModel(BaseModel):
             estimated_output_len = request_body.max_completion_tokens
 
         invoke_viability_result = self.verify_invoke_viability(
-            input_tokens_len=input_token_len, estimated_output_len=estimated_output_len
+            input_tokens_len=input_token_len,
+            estimated_output_len=estimated_output_len,
         )
         if not invoke_viability_result:
             raise RateLimitError("Rate limit reached for requests")
@@ -139,7 +135,9 @@ class OpenAIModel(BaseModel):
         try:
             if getattr(request_body, "stream", None):
                 return await self.stream(
-                    request_body, output_file=output_file, parse_response=parse_response
+                    request_body,
+                    output_file=output_file,
+                    parse_response=parse_response,
                 )
 
             if getattr(request_body, "file", None):
@@ -194,11 +192,17 @@ class OpenAIModel(BaseModel):
 
         stream_options_included = bool(getattr(request_body, "stream_options"))
         if not stream_options_included:
-            setattr(request_body, "stream_options", StreamOptions(include_usage=True))
+            setattr(
+                request_body,
+                "stream_options",
+                StreamOptions(include_usage=True),
+            )
 
         response_list = []
         async for chunk in self.request_model.stream(
-            json_data=request_body, output_file=output_file, with_response_header=True
+            json_data=request_body,
+            output_file=output_file,
+            with_response_header=True,
         ):
             response_list.append(chunk)
 
@@ -273,7 +277,7 @@ class OpenAIModel(BaseModel):
             else self.estimated_output_len
         )
         if estimated_output_len == 0:
-            with open(max_output_token_file_name, "r") as file:
+            with open(max_output_token_file_name) as file:
                 output_token_config = yaml.safe_load(file)
                 estimated_output_len = output_token_config.get(self.model, 0)
                 self.estimated_output_len = (
@@ -354,7 +358,7 @@ class OpenAIModel(BaseModel):
         num_of_input_tokens = self.text_token_calculator.calculate(input_text)
 
         # read openai price info from config file
-        with open(price_config_file_name, "r") as file:
+        with open(price_config_file_name) as file:
             price_config = yaml.safe_load(file)
 
         if self.request_model.endpoint == "chat/completions":
