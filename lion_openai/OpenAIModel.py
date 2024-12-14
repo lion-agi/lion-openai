@@ -22,7 +22,9 @@ from .chat_completions.request.request_body import (
 from .chat_completions.util import get_images, get_text_messages
 from .data_models import OpenAIEndpointRequestBody
 from .embeddings.request_body import OpenAIEmbeddingRequestBody
-from .image_token_calculator import OpenAIImageTokenCalculator
+from .image_token_calculator.image_token_calculator import (
+    OpenAIImageTokenCalculator,
+)
 from .match_response import match_response
 
 load_dotenv()
