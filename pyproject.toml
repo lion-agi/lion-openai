@@ -1,7 +1,7 @@
 [project]
 name = "lion-openai"
 version = "1.0.3"
-description = "Add your description here"
+description = "lion openai service integration"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
