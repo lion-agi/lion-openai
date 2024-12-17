@@ -1,8 +1,5 @@
 import warnings
-from pathlib import Path
 
-import yaml
-from dotenv import load_dotenv
 from lion_service.rate_limiter import RateLimiter, RateLimitError
 from lion_service.service_util import invoke_retry
 from lion_service.token_calculator import TiktokenCalculator
@@ -27,11 +24,48 @@ from .image_token_calculator.image_token_calculator import (
 )
 from .match_response import match_response
 
-load_dotenv()
-path = Path(__file__).parent
+price_config = {
+    "model": {
+        "gpt-4o": {
+            "input_tokens": 0.000005,
+            "output_tokens": 0.000015,
+            "input_tokens_with_batch": 0.0000025,
+            "output_tokens_with_batch": 0.0000075,
+        },
+        "gpt-4o-2024-08-06": {
+            "input_tokens": 0.0000025,
+            "output_tokens": 0.00001,
+            "input_tokens_with_batch": 0.00000125,
+            "output_tokens_with_batch": 0.000005,
+        },
+        "gpt-4o-2024-05-13": {
+            "input_tokens": 0.000005,
+            "output_tokens": 0.000015,
+            "input_tokens_with_batch": 0.0000025,
+            "output_tokens_with_batch": 0.0000075,
+        },
+        "gpt-4o-mini": {
+            "input_tokens": 0.00000015,
+            "output_tokens": 0.0000006,
+            "input_tokens_with_batch": 0.000000075,
+            "output_tokens_with_batch": 0.0000003,
+        },
+        "gpt-4o-mini-2024-07-18": {
+            "input_tokens": 0.00000015,
+            "output_tokens": 0.0000006,
+            "input_tokens_with_batch": 0.000000075,
+            "output_tokens_with_batch": 0.0000003,
+        },
+    }
+}
 
-price_config_file_name = path / "openai_max_output_token_data.yaml"
-max_output_token_file_name = path / "openai_price_data.yaml"
+max_output_token_config = {
+    "gpt-4o": 4096,
+    "gpt-4o-2024-08-06": 16384,
+    "gpt-4o-2024-05-13": 4096,
+    "gpt-4o-mini": 16384,
+    "gpt-4o-mini-2024-07-18": 16384,
+}
 
 
 class OpenAIModel(BaseModel):
@@ -301,12 +335,8 @@ class OpenAIModel(BaseModel):
             else self.estimated_output_len
         )
         if estimated_output_len == 0:
-            with open(max_output_token_file_name) as file:
-                output_token_config = yaml.safe_load(file)
-                estimated_output_len = output_token_config.get(self.model, 0)
-                self.estimated_output_len = (
-                    estimated_output_len  # update to default max output len
-                )
+            estimated_output_len = max_output_token_config.get(self.model, 0)
+            self.estimated_output_len = estimated_output_len
 
         if self.rate_limiter.check_availability(
             input_tokens_len, estimated_output_len
@@ -386,9 +416,6 @@ class OpenAIModel(BaseModel):
         num_of_input_tokens = self.text_token_calculator.calculate(input_text)
 
         # read openai price info from config file
-        with open(price_config_file_name) as file:
-            price_config = yaml.safe_load(file)
-
         if self.request_model.endpoint == "chat/completions":
             model_price_info_dict = price_config["model"][self.model]
             if with_batch:

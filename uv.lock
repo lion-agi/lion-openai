@@ -361,7 +361,6 @@ source = { virtual = "." }
 dependencies = [
     { name = "lion-service" },
     { name = "pillow" },
-    { name = "pyyaml" },
 ]
 
 [package.dev-dependencies]
@@ -378,7 +377,6 @@ dev = [
 requires-dist = [
     { name = "lion-service", specifier = ">=1.1.1" },
     { name = "pillow", specifier = ">=11.0.0" },
-    { name = "pyyaml", specifier = ">=6.0.2" },
 ]
 
 [package.metadata.requires-dev]
