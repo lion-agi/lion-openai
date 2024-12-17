@@ -1,6 +1,6 @@
 [project]
 name = "lion-openai"
-version = "1.0.3"
+version = "1.1.0"
 description = "lion openai service integration"
 authors = [
     { name = "HaiyangLi", email = "quantocean.li@gmail.com" },
